@@ -1,0 +1,2530 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FocusFlow Proof — Teknik Proje Raporu</title>
+  <style>
+    @font-face {
+      font-family: 'Plus Jakarta Sans';
+      src: url('../assets/fonts/PlusJakartaSans-400.ttf') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Plus Jakarta Sans';
+      src: url('../assets/fonts/PlusJakartaSans-500.ttf') format('truetype');
+      font-weight: 500;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Plus Jakarta Sans';
+      src: url('../assets/fonts/PlusJakartaSans-600.ttf') format('truetype');
+      font-weight: 600;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Plus Jakarta Sans';
+      src: url('../assets/fonts/PlusJakartaSans-700.ttf') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+    }
+    @font-face {
+      font-family: 'Plus Jakarta Sans';
+      src: url('../assets/fonts/PlusJakartaSans-800.ttf') format('truetype');
+      font-weight: 800;
+      font-style: normal;
+    }
+
+    :root {
+      --pine: #0b2b21;
+      --forest: #14503b;
+      --emerald: #3c8c68;
+      --mint: #a9e5c6;
+      --lime: #d8f37a;
+      --cream: #f6f3ea;
+      --paper: #fffcf5;
+      --ink: #14241c;
+      --muted: #5c6b61;
+      --line: #e4ded2;
+      --gold: #e9b95c;
+      --chain: #0a2b33;
+      --chain-teal: #2a9d8f;
+      --danger: #c24b3a;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', 'Segoe UI', Arial, sans-serif;
+      color: var(--ink);
+      font-size: 10.2pt;
+      line-height: 1.58;
+      orphans: 3;
+      widows: 3;
+    }
+
+    @page {
+      size: A4;
+      margin: 16mm 15mm 17mm 15mm;
+    }
+
+    @page :first {
+      margin: 0;
+    }
+
+    h1, h2, h3, h4, p, ul, ol, figure, table, pre, .callout, .card, .kpi {
+      margin-top: 0;
+    }
+
+    h1, h2, h3, h4 {
+      color: var(--pine);
+      break-after: avoid;
+      page-break-after: avoid;
+    }
+
+    h2 {
+      font-size: 23pt;
+      line-height: 1.08;
+      letter-spacing: -0.7pt;
+      margin-bottom: 3mm;
+    }
+
+    h3 {
+      font-size: 13.3pt;
+      line-height: 1.2;
+      letter-spacing: -0.2pt;
+      margin: 6mm 0 2.5mm;
+    }
+
+    h4 {
+      font-size: 10.7pt;
+      margin: 4mm 0 1.5mm;
+    }
+
+    p {
+      margin-bottom: 3.2mm;
+    }
+
+    strong {
+      color: var(--forest);
+      font-weight: 700;
+    }
+
+    em {
+      color: var(--muted);
+    }
+
+    a {
+      color: var(--forest);
+      text-decoration: none;
+    }
+
+    ul, ol {
+      margin: 0 0 3.5mm;
+      padding-left: 5.5mm;
+    }
+
+    li {
+      margin-bottom: 1.6mm;
+    }
+
+    .cover {
+      width: 210mm;
+      height: 297mm;
+      overflow: hidden;
+      position: relative;
+      padding: 18mm 18mm 15mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background:
+        radial-gradient(circle at 86% 9%, rgba(169, 229, 198, 0.62) 0, rgba(169, 229, 198, 0) 34%),
+        radial-gradient(circle at 8% 84%, rgba(216, 243, 122, 0.30) 0, rgba(216, 243, 122, 0) 30%),
+        linear-gradient(145deg, #fbf8ef 0%, #f4f1e6 55%, #eef4e9 100%);
+      break-after: page;
+      page-break-after: always;
+    }
+
+    .cover::before {
+      content: '';
+      position: absolute;
+      right: -38mm;
+      top: 22mm;
+      width: 128mm;
+      height: 128mm;
+      border: 1.2px solid rgba(20, 80, 59, 0.16);
+      border-radius: 50%;
+      box-shadow:
+        0 0 0 18mm rgba(20, 80, 59, 0.035),
+        0 0 0 36mm rgba(20, 80, 59, 0.025);
+    }
+
+    .cover::after {
+      content: '';
+      position: absolute;
+      left: -30mm;
+      bottom: -46mm;
+      width: 120mm;
+      height: 120mm;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(42, 157, 143, 0.14), rgba(42, 157, 143, 0));
+    }
+
+    .cover-top, .cover-main, .cover-bottom {
+      position: relative;
+      z-index: 2;
+    }
+
+    .cover-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10mm;
+    }
+
+    .cover-eyebrow {
+      color: var(--forest);
+      font-size: 8.5pt;
+      font-weight: 800;
+      letter-spacing: 1.6pt;
+      text-transform: uppercase;
+    }
+
+    .cover-year {
+      width: 21mm;
+      height: 21mm;
+      border: 1px solid rgba(20, 80, 59, 0.24);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--forest);
+      font-size: 10pt;
+      font-weight: 800;
+      letter-spacing: 0.5pt;
+    }
+
+    .cover-main {
+      max-width: 146mm;
+      margin-top: -2mm;
+    }
+
+    .logo-tile {
+      width: 44mm;
+      height: 44mm;
+      border-radius: 11mm;
+      background: #ffffff;
+      border: 1px solid rgba(20, 80, 59, 0.10);
+      box-shadow: 0 4mm 12mm rgba(11, 43, 33, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 11mm;
+    }
+
+    .logo-tile img {
+      width: 34mm;
+      height: 34mm;
+      object-fit: contain;
+    }
+
+    .cover h1 {
+      font-size: 48pt;
+      line-height: 0.98;
+      letter-spacing: -2.6pt;
+      margin: 0 0 7mm;
+      max-width: 150mm;
+    }
+
+    .cover h1 .proof {
+      color: var(--emerald);
+    }
+
+    .cover-tagline {
+      font-size: 13.2pt;
+      line-height: 1.48;
+      color: #34483d;
+      max-width: 136mm;
+      margin-bottom: 8mm;
+    }
+
+    .cover-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2.2mm;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 1.5mm;
+      border-radius: 999px;
+      padding: 2.1mm 3.6mm;
+      background: rgba(255, 255, 255, 0.74);
+      border: 1px solid rgba(20, 80, 59, 0.16);
+      color: var(--forest);
+      font-size: 8.2pt;
+      font-weight: 700;
+      letter-spacing: 0.15pt;
+    }
+
+    .chip.dark {
+      background: var(--pine);
+      border-color: var(--pine);
+      color: #f4f9f3;
+    }
+
+    .cover-bottom {
+      border-top: 1px solid rgba(20, 80, 59, 0.18);
+      padding-top: 5mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 8mm;
+      font-size: 8.2pt;
+      color: #4c5f54;
+    }
+
+    .cover-bottom strong {
+      display: block;
+      color: var(--pine);
+      font-size: 9pt;
+      margin-bottom: 1mm;
+    }
+
+    .cover-bottom .right {
+      text-align: right;
+    }
+
+    .toc-page {
+      break-after: page;
+      page-break-after: always;
+    }
+
+    .eyebrow {
+      color: var(--emerald);
+      font-size: 8pt;
+      font-weight: 800;
+      letter-spacing: 1.4pt;
+      text-transform: uppercase;
+      margin-bottom: 2.5mm;
+    }
+
+    .toc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4mm 9mm;
+      margin-top: 7mm;
+    }
+
+    .toc-item {
+      display: flex;
+      gap: 3.2mm;
+      padding: 3.2mm 3.4mm;
+      border: 1px solid var(--line);
+      border-radius: 2.5mm;
+      background: var(--paper);
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .toc-num {
+      color: var(--emerald);
+      font-size: 14pt;
+      font-weight: 800;
+      line-height: 1;
+      min-width: 8mm;
+    }
+
+    .toc-item h4 {
+      margin: 0 0 1mm;
+      font-size: 9.6pt;
+    }
+
+    .toc-item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 8.2pt;
+      line-height: 1.42;
+    }
+
+    .section {
+      margin-bottom: 8mm;
+    }
+
+    .new-page {
+      break-before: page;
+      page-break-before: always;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 5mm;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 4mm;
+      margin-bottom: 5mm;
+    }
+
+    .section-num {
+      color: var(--mint);
+      font-size: 30pt;
+      font-weight: 800;
+      line-height: 0.9;
+      letter-spacing: -1pt;
+      min-width: 18mm;
+    }
+
+    .section-head h2 {
+      margin-bottom: 0;
+    }
+
+    .lead {
+      color: #3f5448;
+      font-size: 11.2pt;
+      line-height: 1.55;
+      margin-bottom: 5mm;
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 3mm;
+      margin: 5mm 0 6mm;
+    }
+
+    .kpi {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 3mm;
+      padding: 4mm 3.5mm;
+      min-height: 27mm;
+    }
+
+    .kpi .value {
+      color: var(--forest);
+      font-size: 21pt;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.5pt;
+      margin-bottom: 2mm;
+    }
+
+    .kpi .label {
+      color: var(--muted);
+      font-size: 8pt;
+      font-weight: 600;
+      line-height: 1.35;
+    }
+
+    .table-wrap {
+      margin: 3mm 0 4.5mm;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8.9pt;
+      line-height: 1.42;
+    }
+
+    thead {
+      display: table-header-group;
+    }
+
+    th {
+      background: var(--pine);
+      color: #f8fbf7;
+      text-align: left;
+      padding: 2.5mm 2.6mm;
+      font-size: 8.2pt;
+      font-weight: 700;
+      letter-spacing: 0.15pt;
+    }
+
+    th:first-child {
+      border-radius: 1.8mm 0 0 1.8mm;
+    }
+
+    th:last-child {
+      border-radius: 0 1.8mm 1.8mm 0;
+    }
+
+    td {
+      padding: 2.5mm 2.6mm;
+      border-bottom: 1px solid #ebe5da;
+      vertical-align: top;
+    }
+
+    tr:nth-child(even) td {
+      background: #fbf9f3;
+    }
+
+    tr {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5mm;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 3mm;
+      padding: 4.2mm;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .card h4 {
+      margin-top: 0;
+    }
+
+    .card p:last-child, .card ul:last-child {
+      margin-bottom: 0;
+    }
+
+    .callout {
+      border-left: 3.2px solid var(--emerald);
+      background: #f1f7f2;
+      border-radius: 0 2.5mm 2.5mm 0;
+      padding: 4mm 4.5mm;
+      margin: 4mm 0;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .callout p:last-child, .callout ul:last-child {
+      margin-bottom: 0;
+    }
+
+    .callout.warn {
+      border-left-color: var(--gold);
+      background: #fdf8ec;
+    }
+
+    .callout.chain {
+      border-left-color: var(--chain-teal);
+      background: #eef7f7;
+    }
+
+    .callout.dark {
+      border-left: 0;
+      background: var(--pine);
+      color: #edf7ee;
+      border-radius: 3mm;
+      padding: 5mm 5.5mm;
+    }
+
+    .callout.dark strong {
+      color: #ffffff;
+    }
+
+    .callout-title {
+      display: block;
+      color: var(--forest);
+      font-size: 8.1pt;
+      font-weight: 800;
+      letter-spacing: 1pt;
+      text-transform: uppercase;
+      margin-bottom: 1.5mm;
+    }
+
+    .callout.dark .callout-title {
+      color: var(--mint);
+    }
+
+    .arch {
+      margin: 3mm 0 5mm;
+    }
+
+    .arch-layer {
+      display: flex;
+      gap: 4mm;
+      align-items: center;
+      padding: 3.2mm 3.8mm;
+      border: 1px solid var(--line);
+      border-radius: 2.6mm;
+      background: var(--paper);
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .arch-layer .arch-label {
+      min-width: 35mm;
+      color: var(--forest);
+      font-size: 8.2pt;
+      font-weight: 800;
+      letter-spacing: 0.7pt;
+      text-transform: uppercase;
+    }
+
+    .arch-layer .arch-body {
+      font-size: 8.6pt;
+      color: #405349;
+    }
+
+    .arch-layer .arch-body strong {
+      color: var(--pine);
+    }
+
+    .arch-arrow {
+      text-align: center;
+      color: var(--emerald);
+      font-size: 12pt;
+      line-height: 1;
+      padding: 1.2mm 0;
+    }
+
+    .flow {
+      position: relative;
+      margin: 4mm 0 5mm 2mm;
+      padding-left: 7mm;
+    }
+
+    .flow::before {
+      content: '';
+      position: absolute;
+      left: 2.2mm;
+      top: 3mm;
+      bottom: 3mm;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--mint), var(--emerald));
+    }
+
+    .flow-step {
+      position: relative;
+      margin-bottom: 3mm;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .flow-step::before {
+      content: '';
+      position: absolute;
+      left: -6.6mm;
+      top: 1.5mm;
+      width: 3.2mm;
+      height: 3.2mm;
+      border-radius: 50%;
+      background: var(--paper);
+      border: 1.3px solid var(--emerald);
+    }
+
+    .flow-step h4 {
+      margin: 0 0 0.7mm;
+      font-size: 9.6pt;
+    }
+
+    .flow-step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 8.7pt;
+    }
+
+    pre {
+      background: var(--pine);
+      color: #eaf6ec;
+      border-radius: 2.6mm;
+      padding: 4mm 4.5mm;
+      font-family: 'Cascadia Mono', Consolas, 'Courier New', monospace;
+      font-size: 8pt;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      break-inside: avoid;
+      page-break-inside: avoid;
+      margin: 3mm 0 4mm;
+    }
+
+    code {
+      font-family: 'Cascadia Mono', Consolas, 'Courier New', monospace;
+      font-size: 0.93em;
+      background: #eef2e9;
+      color: var(--forest);
+      padding: 0.3mm 1mm;
+      border-radius: 1mm;
+    }
+
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+      border-radius: 0;
+    }
+
+    .code-caption {
+      color: var(--muted);
+      font-size: 7.8pt;
+      margin: -2mm 0 3.5mm;
+    }
+
+    .reward-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 3mm;
+      margin: 4mm 0 5mm;
+    }
+
+    .reward-card {
+      border: 1px solid var(--line);
+      border-radius: 3mm;
+      padding: 3.6mm 3.2mm;
+      background: var(--paper);
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .reward-card .cost {
+      color: var(--emerald);
+      font-size: 8pt;
+      font-weight: 800;
+      letter-spacing: 0.3pt;
+      margin-bottom: 1.5mm;
+    }
+
+    .reward-card h4 {
+      font-size: 9.2pt;
+      margin: 0 0 1.2mm;
+    }
+
+    .reward-card p {
+      color: var(--muted);
+      font-size: 7.9pt;
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    .shots {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4mm;
+      margin: 4mm 0 2mm;
+      align-items: start;
+    }
+
+    .shot {
+      break-inside: avoid;
+      page-break-inside: avoid;
+      margin: 0;
+    }
+
+    .shot img {
+      width: 100%;
+      display: block;
+      border-radius: 3mm;
+      border: 1px solid #d8d2c5;
+      box-shadow: 0 2mm 5mm rgba(11, 43, 33, 0.13);
+    }
+
+    .shot figcaption {
+      color: var(--muted);
+      font-size: 7.7pt;
+      line-height: 1.42;
+      margin-top: 2mm;
+    }
+
+    .shot figcaption strong {
+      color: var(--pine);
+    }
+
+    .check-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .check-list li {
+      position: relative;
+      padding-left: 6mm;
+      margin-bottom: 2mm;
+    }
+
+    .check-list li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--emerald);
+      font-weight: 800;
+    }
+
+    .badge-line {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2mm;
+      margin: 2mm 0 4mm;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #e7f2e9;
+      border: 1px solid #d3e7d8;
+      color: var(--forest);
+      border-radius: 999px;
+      padding: 1.2mm 2.6mm;
+      font-size: 7.6pt;
+      font-weight: 700;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 8.2pt;
+    }
+
+    .mono {
+      font-family: 'Cascadia Mono', Consolas, monospace;
+      font-size: 0.9em;
+    }
+
+    .glossary {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3mm 5mm;
+    }
+
+    .glossary-item {
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 2mm;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .glossary-item h4 {
+      margin: 0 0 0.8mm;
+      font-size: 9.2pt;
+    }
+
+    .glossary-item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 8.1pt;
+      line-height: 1.42;
+    }
+
+    .footer-note {
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      padding-top: 4mm;
+      margin-top: 8mm;
+      font-size: 8pt;
+      line-height: 1.5;
+    }
+
+    .page-break {
+      break-before: page;
+      page-break-before: always;
+    }
+
+    .avoid-break {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .toc-note {
+      margin-top: 7mm;
+    }
+
+    .end-mark {
+      display: inline-block;
+      width: 8mm;
+      height: 1.1mm;
+      background: var(--emerald);
+      border-radius: 99px;
+      vertical-align: middle;
+      margin-right: 2mm;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- KAPAK -->
+  <div class="cover">
+    <div class="cover-top">
+      <div class="cover-eyebrow">Mobil Programlama Dersi · Proje Raporu</div>
+      <div class="cover-year">2026</div>
+    </div>
+
+    <div class="cover-main">
+      <div class="logo-tile">
+        <img src="../assets/branding/focusflow_mark_512.png" alt="FocusFlow Proof logosu">
+      </div>
+      <h1>FocusFlow <span class="proof">Proof</span></h1>
+      <p class="cover-tagline">
+        Odak oturumlarını ve görevleri yerel, kriptografik bir kanıt defterine
+        yazan; kazanılan FOCUS’u harcanabilir bir motivasyon birimine dönüştüren
+        Android uygulaması.
+      </p>
+      <div class="cover-chips">
+        <span class="chip dark">Android</span>
+        <span class="chip">Flutter 3.35</span>
+        <span class="chip">Dart 3.9</span>
+        <span class="chip">Yerel öncelikli</span>
+        <span class="chip">Sunucusuz</span>
+      </div>
+    </div>
+
+    <div class="cover-bottom">
+      <div>
+        <strong>Teknik rapor</strong>
+        Ürün mimarisi · Dart · Effective Dart · Kanıt Defteri · Ödül ekonomisi
+      </div>
+      <div class="right">
+        <strong>Sürüm 2.0.0+2</strong>
+        24 Ekim 2026 · 51 Dart dosyası · 36 test
+      </div>
+    </div>
+  </div>
+
+  <!-- İÇİNDEKİLER -->
+  <section class="toc-page">
+    <div class="eyebrow">Rapor haritası</div>
+    <h2>İçindekiler</h2>
+    <p class="lead">
+      Bu rapor; uygulamanın ne yaptığını, Dart ile hangi katmanların kurulduğunu,
+      Effective Dart ilkelerinin kodda nasıl karşılık bulduğunu ve yerel kanıt
+      defterinin neden dekoratif değil, ürünün yazma yolunun merkezinde olduğunu
+      açıklar.
+    </p>
+
+    <div class="toc-grid">
+      <div class="toc-item">
+        <div class="toc-num">01</div>
+        <div>
+          <h4>Proje Künyesi ve Yönetici Özeti</h4>
+          <p>Ürünün amacı, kapsamı, öne çıkan sonuçları ve ölçülebilir proje verileri.</p>
+        </div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-num">02</div>
+        <div>
+          <h4>Ürün Deneyimi: Odak, Görev, Cüzdan</h4>
+          <p>Beş sekme, Pomodoro davranışı, görev yönetimi, istatistik ve kullanıcı yolculuğu.</p>
+        </div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-num">03</div>
+        <div>
+          <h4>Dart ile Ne Kurduk?</h4>
+          <p>Katmanlı mimari, durum yönetimi, yerel depolama, zamanlayıcı ve test edilebilirlik.</p>
+        </div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-num">04</div>
+        <div>
+          <h4>Effective Dart: İlkeler ve Kodda Karşılığı</h4>
+          <p>Stil, dokümantasyon, kullanım ve tasarım başlıklarında somut dosya kanıtları.</p>
+        </div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-num">05</div>
+        <div>
+          <h4>Kanıt Defteri: Yerel Blok Zinciri Altyapısı</h4>
+          <p>Hash zinciri, Merkle kökü, proof-of-work, Ed25519 imzalar ve doğrulama.</p>
+        </div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-num">06</div>
+        <div>
+          <h4>Ödül Mağazası: FOCUS’un Harcanma Yeri</h4>
+          <p>Cüzdanın amacı, dört yerel ödül, yakma adresi ve örnek bakiye akışı.</p>
+        </div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-num">07</div>
+        <div>
+          <h4>Doğrulama, Testler ve Sınırlar</h4>
+          <p>36 test, statik analiz, APK, emülatör senaryoları ve bilinçli sınırlar.</p>
+        </div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-num">08</div>
+        <div>
+          <h4>Sonuç ve Değerlendirme</h4>
+          <p>Projenin teknik kazanımları, ürün bütünlüğü ve sonraki adımlar.</p>
+        </div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-num">A</div>
+        <div>
+          <h4>Ek: Dosya Haritası ve Teknik Sabitler</h4>
+          <p>Kritik dosyalar, token formülleri, adres kuralları ve kısa sözlük.</p>
+        </div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-num">•</div>
+        <div>
+          <h4>Doğrulama özeti</h4>
+          <p><span class="mono">flutter analyze</span>: 0 sorun · <span class="mono">flutter test</span>: 36/36 başarılı.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout toc-note">
+      <span class="callout-title">Kısa okuma önerisi</span>
+      Ürünü anlamak için 1–2. bölümler; Dart ve kod kalitesi için 3–4. bölümler;
+      blok zinciri altyapısı için 5. bölüm; FOCUS’un neden harcanabilir olduğunu
+      görmek için 6. bölüm yeterlidir. Test ve sınırlar 7. bölümde şeffaf biçimde
+      listelenmiştir.
+    </div>
+
+    <p class="small" style="margin-top: 10mm;">
+      Rapor, 24 Ekim 2026 tarihli çalışma ağacındaki <strong>2.0.0+2</strong>
+      sürümü ve Android API 36 emülatör doğrulamaları üzerinden hazırlanmıştır.
+      Ekran görüntüleri uygulamanın gerçek çalışan arayüzünden alınmıştır.
+    </p>
+  </section>
+
+  <!-- 01 -->
+  <section class="section new-page">
+    <div class="section-head">
+      <div class="section-num">01</div>
+      <div>
+        <div class="eyebrow">Genel bakış</div>
+        <h2>Proje künyesi ve yönetici özeti</h2>
+      </div>
+    </div>
+
+    <p class="lead">
+      FocusFlow Proof, Pomodoro tekniğiyle odaklanmayı kolaylaştıran; tamamlanan
+      oturumları, görevleri ve kazanılan rozetleri cihazda çalışan bir kanıt
+      defterine kaydeden Türkçe bir Android uygulamasıdır. Ürünün ayırt edici
+      yönü, üretkenlik verisini yalnızca saklaması değil, sonradan değiştirilip
+      değiştirilmediğinin anlaşılabilmesidir.
+    </p>
+
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="value">5</div>
+        <div class="label">Ana sekme: Ana Sayfa, Odak, Görevler, Kanıt, Cüzdan</div>
+      </div>
+      <div class="kpi">
+        <div class="value">7</div>
+        <div class="label">Kanıt Defteri işlem türü; ödül kullanımı dahil</div>
+      </div>
+      <div class="kpi">
+        <div class="value">8</div>
+        <div class="label">NFT benzeri başarı rozeti ve rozet ödülü</div>
+      </div>
+      <div class="kpi">
+        <div class="value">36</div>
+        <div class="label">Birim, widget ve dar ekran testi; tamamı başarılı</div>
+      </div>
+    </div>
+
+    <h3>Proje kimliği</h3>
+    <div class="table-wrap">
+      <table>
+        <tbody>
+          <tr>
+            <td style="width: 30%;"><strong>Ürün adı</strong></td>
+            <td>FocusFlow Proof</td>
+          </tr>
+          <tr>
+            <td><strong>Sürüm</strong></td>
+            <td>2.0.0+2</td>
+          </tr>
+          <tr>
+            <td><strong>Platform</strong></td>
+            <td>Android; mobil öncelikli. Web ve masaüstü markalaması kapsam dışı.</td>
+          </tr>
+          <tr>
+            <td><strong>Dil ve çatı</strong></td>
+            <td>Dart 3.9.2, Flutter 3.35.4, Material 3</td>
+          </tr>
+          <tr>
+            <td><strong>Mimari</strong></td>
+            <td>UI / durum / iş mantığı / depolama ayrımı; constructor tabanlı bağımlılık enjeksiyonu</td>
+          </tr>
+          <tr>
+            <td><strong>Yerel depolama</strong></td>
+            <td><span class="mono">shared_preferences</span> üzerinde JSON kayıtları</td>
+          </tr>
+          <tr>
+            <td><strong>Ağ bağımlılığı</strong></td>
+            <td>Yok. Sunucu, hesap, API, bulut veya P2P ağ yok; Android manifestinde internet izni istenmez.</td>
+          </tr>
+          <tr>
+            <td><strong>Para birimi</strong></td>
+            <td>FOCUS; yalnızca uygulama içi motivasyon birimi, gerçek para değeri yok.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Yönetici özeti</h3>
+    <p>
+      Uygulama, klasik bir Pomodoro deneyimini üç katmanlı bir değer önerisiyle
+      birleştirir. Birinci katman <strong>odak</strong>tır: 25 dakikalık odak,
+      5 dakikalık kısa mola ve 15 dakikalık uzun mola varsayılanlarıyla çalışan,
+      uygulama arka plana alınsa bile hedef bitiş zamanından hesaplanan bir
+      sayaç. İkinci katman <strong>görev ve istatistik</strong>tir: görevler
+      eklenir, düzenlenir, tamamlanır; günlük ve son yedi güne ait değerler sabit
+      demo verisinden değil, gerçek kayıtlardan üretilir. Üçüncü katman
+      <strong>kanıt ve ödül</strong>dür: her odak oturumu, görev ve rozet yerel
+      defterde işlem olarak durur; kazanılan FOCUS, Ödül Mağazası’nda kahve
+      molası, dizi, oyun veya dinlenme gününe dönüştürülebilir.
+    </p>
+    <p>
+      Kanıt Defteri; SHA-256 hash zinciri, Merkle kökü, proof-of-work madenciliği,
+      Ed25519 imzaları ve bakiye doğrulamasını birleştirir. Bu yapı dekoratif bir
+      “blockchain” görünümü değildir: odak ve görev ödülleri doğrudan bu yazma
+      yolundan geçer. Kurcalama demosu, son bloktaki bir işlem bellekte
+      değiştirildiğinde doğrulayıcının hash, imza ve bakiye zincirini nasıl
+      kırdığını gösterir; cüzdan ise bu sırada sağlam defter kopyasından
+      okunmaya devam eder.
+    </p>
+    <p>
+      Proje 51 Dart kaynak dosyası ve yaklaşık 13,6 bin satır uygulama kodundan
+      oluşur. Sekiz test dosyasındaki 36 test; sayaç yaşam döngüsünden blok
+      doğrulamaya, JSON dayanıklılığından 360×800 dar ekran taşma kontrolüne
+      kadar geniş bir alanı kapsar. <span class="mono">flutter analyze</span>
+      sıfır sorun bildirir; hata ayıklama APK’sı üretilmiş ve API 36
+      emülatöründe çalıştırılmıştır.
+    </p>
+
+    <h3>Öne çıkanlar</h3>
+    <ul class="check-list">
+      <li><strong>Tek seferlik oturum tamamlama:</strong> sayaç tamamlandığında oturum yalnızca bir kez kaydedilir; <span class="mono">Timer</span> ve dinleyiciler dispose edilir.</li>
+      <li><strong>Gerçek kanıt defteri:</strong> her ödül; kanonik JSON, SHA-256 işlem kimliği, Merkle kökü ve proof-of-work içeren bir bloğa yazılır.</li>
+      <li><strong>Ed25519 imzalı harcama:</strong> transfer ve ödül kullanımı cihazdaki özel anahtarla imzalanır; özel anahtar dışarı çıkmaz.</li>
+      <li><strong>Anlamlı cüzdan:</strong> FOCUS yalnızca birikmez; dört yerel ödülden biriyle harcanır ve her harcama defterde kalır.</li>
+      <li><strong>Dürüst kapsam:</strong> tek düğümlü yerel demodur; gerçek para, P2P ağ veya dağıtık mutabakat iddiası taşımaz.</li>
+    </ul>
+
+    <h3>Kapsam</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 50%;">Kapsam içinde</th>
+            <th>Kapsam dışında</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Yerel Pomodoro sayacı, görev yönetimi, günlük istatistikler</td>
+            <td>Hesap, bulut senkronizasyonu, çok kullanıcılı sunucu</td>
+          </tr>
+          <tr>
+            <td>Yerel kanıt defteri, blok/işlem gezgini, doğrulama ve kurcalama demosu</td>
+            <td>Gerçek P2P ağ, dağıtık fikir birliği, harici blok zinciri</td>
+          </tr>
+          <tr>
+            <td>FOCUS cüzdanı, Ed25519 transfer, rozetler ve Ödül Mağazası</td>
+            <td>Gerçek para, borsa, spekülatif token ekonomisi</td>
+          </tr>
+          <tr>
+            <td>Türkçe arayüz, açık/koyu tema, Android markalaması ve testler</td>
+            <td>Web/masaüstü sürümü, push bildirimi, arka plan alarmı</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section class="section new-page">
+    <div class="section-head">
+      <div class="section-num">02</div>
+      <div>
+        <div class="eyebrow">Ürün deneyimi</div>
+        <h2>Odak, görev ve cüzdan tek bir döngüde</h2>
+      </div>
+    </div>
+
+    <p class="lead">
+      Uygulamanın ana fikri, kullanıcıyı ayrı ayrı özelliklerle yormak yerine
+      tek bir döngüde tutmaktır: odaklan, görevi tamamla, kanıt üret, FOCUS
+      kazan ve bunu kendi ödülüne dönüştür. Beş sekme bu döngünün farklı
+      yüzlerini gösterir.
+    </p>
+
+    <h3>Beş sekme, tek akış</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 17%;">Sekme</th>
+            <th style="width: 43%;">Kullanıcıya sunduğu değer</th>
+            <th>Teknik karşılığı</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Ana Sayfa</strong></td>
+            <td>Günlük odak süresi, tamamlanan/bekleyen görevler, FOCUS bakiyesi, son blok ve defter sağlığı.</td>
+            <td><span class="mono">HomeScreen</span>, <span class="mono">_ProofSummaryCard</span>, gerçek zamanlı <span class="mono">AppController</span> verileri.</td>
+          </tr>
+          <tr>
+            <td><strong>Odak</strong></td>
+            <td>Odak, kısa mola ve uzun mola modları; başlat, duraklat, devam et, sıfırla.</td>
+            <td><span class="mono">FocusTimerController</span>, hedef bitiş zamanı, <span class="mono">WidgetsBindingObserver</span>.</td>
+          </tr>
+          <tr>
+            <td><strong>Görevler</strong></td>
+            <td>Görev ekleme, düzenleme, tamamlama, silme; Tümü / Bekleyenler / Tamamlananlar filtreleri.</td>
+            <td><span class="mono">StudyTask</span>, <span class="mono">TaskRepository</span>, doğrulama ve JSON serileştirme.</td>
+          </tr>
+          <tr>
+            <td><strong>Kanıt</strong></td>
+            <td>Blok ve işlem gezgini, PoW ve Merkle bilgisi, defter doğrulama, kurcalama demosu.</td>
+            <td><span class="mono">ChainScreen</span>, <span class="mono">ChainValidator</span>, <span class="mono">FocusChainService</span>.</td>
+          </tr>
+          <tr>
+            <td><strong>Cüzdan</strong></td>
+            <td>FOCUS bakiyesi, kazanılan/harcanan toplam, imzalı transfer, rozetler ve Ödül Mağazası girişi.</td>
+            <td><span class="mono">WalletScreen</span>, <span class="mono">WalletService</span>, <span class="mono">RewardsPage</span>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      İstatistikler ve ayarlar alt gezinmede ayrı bir sekme kaplamaz; ilgili
+      ekranlardan itilen sayfalar olarak açılır. Böylece beş ana sekme yalnızca
+      günlük kullanım döngüsüne ayrılır.
+    </p>
+
+    <h3>Kullanıcı yolculuğu</h3>
+    <div class="flow">
+      <div class="flow-step">
+        <h4>1. İlk açılış ve genesis</h4>
+        <p>Yerel cüzdan oluşturulur; genesis bloğu ve 10 FOCUS hoş geldin ödülü deftere yazılır.</p>
+      </div>
+      <div class="flow-step">
+        <h4>2. Odak oturumu</h4>
+        <p>Kullanıcı 25 dakikalık odak modunu başlatır. Kalan süre her saniye hedef bitiş zamanından yeniden hesaplanır.</p>
+      </div>
+      <div class="flow-step">
+        <h4>3. Oturum tamamlanır</h4>
+        <p>Oturum bir kez kaydedilir; her tam 5 dakika için 1 FOCUS kazanılır. 25 dakikalık oturum 5 FOCUS üretir.</p>
+      </div>
+      <div class="flow-step">
+        <h4>4. Blok ve rozet</h4>
+        <p>Ödül işlemi mempool’a girer, proof-of-work ile bloklaşır. Hak edilen rozetler ayrı işlemlerle basılır.</p>
+      </div>
+      <div class="flow-step">
+        <h4>5. Görev tamamlama</h4>
+        <p>Tamamlanan görev 2 FOCUS üretir; odağa bağlı rozet koşulları yeniden değerlendirilir.</p>
+      </div>
+      <div class="flow-step">
+        <h4>6. Harcama ve kanıt</h4>
+        <p>Cüzdanda FOCUS, Ödül Mağazası’nda bir molaya dönüşür. Harcama imzalı işlemle yakma adresine gider ve defterde kalır.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <span class="callout-title">Sayaç neden kaymıyor?</span>
+      <p>
+        <span class="mono">FocusTimerController</span> her saniye yalnızca
+        <span class="mono">remainingSeconds--</span> yapmaz. Başlatma ve devam
+        etme sırasında bir <strong>hedef bitiş zamanı</strong> oluşturur; kalan
+        süreyi <span class="mono">target.difference(clock())</span> ile
+        hesaplar. Uygulama arka plana alınıp geri döndüğünde
+        <span class="mono">syncNow()</span> çağrılır. Bu tasarım, kare atlaması
+        veya işletim sistemi gecikmesi nedeniyle sayacın sapmasını engeller.
+      </p>
+    </div>
+
+    <h3>Odak ve görev davranışı</h3>
+    <div class="two-col">
+      <div class="card">
+        <h4>Pomodoro varsayılanları</h4>
+        <ul>
+          <li>Odak: 25 dakika (5–120 aralığı)</li>
+          <li>Kısa mola: 5 dakika (1–30 aralığı)</li>
+          <li>Uzun mola: 15 dakika (5–60 aralığı)</li>
+          <li>Çalışan oturumda mod değiştirilemez; önce sıfırlama onayı gerekir.</li>
+          <li>Süre dolunca oturum yalnızca bir kez kaydedilir; sayaç kaynakları serbest bırakılır.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Görev kuralları</h4>
+        <ul>
+          <li>Başlık boş veya yalnızca boşluk olamaz; en fazla 120 karakter.</li>
+          <li>Kategori ve son tarih isteğe bağlıdır.</li>
+          <li>Tamamlanma zamanı ayrıca saklanır; günlük istatistikler bu zamanı kullanır.</li>
+          <li>Bozuk JSON kaydı uygulamayı düşürmez; geçersiz kayıt atlanır.</li>
+          <li>Silme ve tamamlama işlemleri merkezi denetleyici üzerinden yürür.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>FOCUS tokenomisi</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 34%;">Kaynak</th>
+            <th style="width: 24%;">Kazanç</th>
+            <th>Açıklama</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Genesis / hoş geldin</td>
+            <td>10 FOCUS</td>
+            <td>İlk cüzdanla birlikte genesis bloğunda üretilir.</td>
+          </tr>
+          <tr>
+            <td>Tamamlanan odak oturumu</td>
+            <td>Her 5 dakika için 1 FOCUS</td>
+            <td>5 dakikadan kısa pozitif oturumda en az 1 FOCUS; 25 dakikada 5 FOCUS.</td>
+          </tr>
+          <tr>
+            <td>Tamamlanan görev</td>
+            <td>2 FOCUS</td>
+            <td>Görev başına bir kez; aynı görev için ikinci ödül üretilmez.</td>
+          </tr>
+          <tr>
+            <td>Blok üretimi</td>
+            <td>1 FOCUS</td>
+            <td>Her başarılı madencilikte madenciye coinbase ödülü.</td>
+          </tr>
+          <tr>
+            <td>Rozet basımı</td>
+            <td>3–25 FOCUS</td>
+            <td>Sekiz rozetin koşuluna göre değişir; toplam potansiyel 103 FOCUS.</td>
+          </tr>
+          <tr>
+            <td>Transfer</td>
+            <td>0 ek ücret</td>
+            <td>Ed25519 imzalı; yalnızca geçerli <span class="mono">0x</span> adreslerine.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">
+      Örnek: 25 dakikalık bir odak oturumu 5 FOCUS odak ödülü ve 1 FOCUS blok
+      ödülü üretir. Aynı işlem sırasında yeni bir rozet hak edilirse rozet ödülü
+      ve rozet bloğunun coinbase ödülü de bakiyeye eklenir.
+    </p>
+  </section>
+
+  <!-- 03 -->
+  <section class="section new-page">
+    <div class="section-head">
+      <div class="section-num">03</div>
+      <div>
+        <div class="eyebrow">Dart ile üretim</div>
+        <h2>Dart ile ne kurduk?</h2>
+      </div>
+    </div>
+
+    <p class="lead">
+      Uygulamanın tamamı Dart ile yazıldı: ekranlar, durum yönetimi, iş
+      kuralları, yerel depolama, kriptografi, testler ve Android yapılandırması.
+      Amaç yalnızca “Dart kullanmak” değil; her katmanı test edilebilir ve
+      birbirinden ayrılabilir tutmaktı.
+    </p>
+
+    <h3>Katmanlı mimari</h3>
+    <div class="arch">
+      <div class="arch-layer">
+        <div class="arch-label">Sunum</div>
+        <div class="arch-body"><strong>features/</strong> ve <strong>widgets/</strong>: Ana Sayfa, Odak, Görevler, Kanıt, Cüzdan, Ödül Mağazası, istatistik ve ayarlar. Widget’lar yalnızca görüntüler ve kullanıcı olaylarını iletir.</div>
+      </div>
+      <div class="arch-arrow">↓</div>
+      <div class="arch-layer">
+        <div class="arch-label">Durum</div>
+        <div class="arch-body"><strong>AppController</strong>, <strong>FocusTimerController</strong>, <strong>FocusChainService</strong>: <span class="mono">ChangeNotifier</span> tabanlı durum; UI <span class="mono">ListenableBuilder</span> ile dinler.</div>
+      </div>
+      <div class="arch-arrow">↓</div>
+      <div class="arch-layer">
+        <div class="arch-label">Alan modeli</div>
+        <div class="arch-body"><strong>models/</strong> ve <strong>blockchain/models/</strong>: değişmez görev, oturum, ayar, işlem, blok, defter ve cüzdan nesneleri; JSON dönüşümleri ve doğrulama.</div>
+      </div>
+      <div class="arch-arrow">↓</div>
+      <div class="arch-layer">
+        <div class="arch-label">Veri ve kripto</div>
+        <div class="arch-body"><strong>data/</strong> ve <strong>blockchain/</strong>: repository’ler, <span class="mono">SharedPreferences</span>, canonical JSON, SHA-256, Merkle ağacı, proof-of-work, Ed25519 ve doğrulayıcı.</div>
+      </div>
+    </div>
+
+    <p>
+      Bağımlılıklar constructor üzerinden verilir. <span class="mono">main.dart</span>,
+      <span class="mono">SharedPreferences</span> örneğini bir kez oluşturur;
+      repository’ler ve <span class="mono">FocusChainService</span> aynı depolama
+      katmanını paylaşır. Testler ise <span class="mono">SharedPreferences.setMockInitialValues</span>
+      ile aynı nesneleri bellek içi depoya bağlar. Bu, “test için ayrı uygulama”
+      yazmadan gerçek kodun test edilmesini sağlar.
+    </p>
+
+    <h3>Dart ile çözülen somut problemler</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 27%;">Problem</th>
+            <th style="width: 38%;">Dart çözümü</th>
+            <th>Ana dosya</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Sayaç sapması ve çift kayıt</td>
+            <td>Hedef bitiş zamanı, <span class="mono">Timer.periodic</span>, <span class="mono">_completionHandled</span> ve <span class="mono">dispose</span>.</td>
+            <td><span class="mono">features/focus/focus_timer_controller.dart</span></td>
+          </tr>
+          <tr>
+            <td>Görev doğrulama ve kalıcılık</td>
+            <td>Değişmez model, <span class="mono">copyWith</span>, JSON doğrulama, repository ve hata toleranslı yükleme.</td>
+            <td><span class="mono">models/study_task.dart</span>, <span class="mono">data/task_repository.dart</span></td>
+          </tr>
+          <tr>
+            <td>Gerçek istatistik üretimi</td>
+            <td>UI’dan bağımsız saf hesaplayıcı; tamamlanmış odak oturumlarını filtreleme, günlük ve yedi günlük toplamlar.</td>
+            <td><span class="mono">features/statistics/statistics_calculator.dart</span></td>
+          </tr>
+          <tr>
+            <td>Merkezi durum ve ekran geçişi</td>
+            <td><span class="mono">ChangeNotifier</span>, <span class="mono">IndexedStack</span>, tek <span class="mono">AppController</span> ve beş sekmeli kabuk.</td>
+            <td><span class="mono">state/app_controller.dart</span>, <span class="mono">app.dart</span></td>
+          </tr>
+          <tr>
+            <td>Kanıt defteri</td>
+            <td>İşlem oluşturma, mempool, blok madenciliği, doğrulama, kurcalama ve kalıcılık.</td>
+            <td><span class="mono">blockchain/state/focus_chain_service.dart</span></td>
+          </tr>
+          <tr>
+            <td>FOCUS harcama</td>
+            <td>İmzalı <span class="mono">rewardRedemption</span> işlemi, yakma adresi, bakiye kontrolü ve kullanım geçmişi.</td>
+            <td><span class="mono">features/rewards/rewards_page.dart</span></td>
+          </tr>
+          <tr>
+            <td>Marka ve responsive görünüm</td>
+            <td>Material 3 teması, Plus Jakarta Sans, özel renk paleti, logo/splash ve 360×800 taşma testi.</td>
+            <td><span class="mono">core/theme/app_theme.dart</span>, <span class="mono">app.dart</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Zamanlayıcı: ürünün en kritik davranışı</h3>
+    <p>
+      Pomodoro uygulamalarında en sık görülen hata, sayacı her saniye bir
+      azaltıp uygulama arka plana alındığında süreyi kaybetmektir. Bu projede
+      sayaç, hedef zaman ile gerçek zaman arasındaki farkı kullanır:
+    </p>
+    <pre><code>final remainingMilliseconds = target.difference(_clock()).inMilliseconds;
+var nextRemaining = remainingMilliseconds &lt;= 0
+    ? 0
+    : (remainingMilliseconds + 999) ~/ 1000;</code></pre>
+    <p class="code-caption">FocusTimerController — kalan süre, hedef bitiş zamanından hesaplanır.</p>
+
+    <p>
+      Süre sıfıra indiğinde <span class="mono">_completeSession()</span> çalışır.
+      <span class="mono">_completionHandled</span> bayrağı, aynı oturumun iki kez
+      kaydedilmesini engeller. Sayaç durdurulur, hedef temizlenir ve oturum
+      <span class="mono">onSessionCompleted</span> geri çağrısıyla dışarı
+      aktarılır. <span class="mono">dispose()</span> içinde de timer iptal edilir.
+    </p>
+
+    <h3>Durum yönetimi ve yerel depolama</h3>
+    <div class="two-col">
+      <div class="card">
+        <h4>Neden ek paket yok?</h4>
+        <p>
+          Uygulamanın durumu tek bir merkezi denetleyici ve iki alt servis
+          tarafından yönetilecek kadar derli topludur. Flutter’ın
+          <span class="mono">ChangeNotifier</span> ve
+          <span class="mono">ListenableBuilder</span> yapıları yeterli olduğu
+          için BLoC, Riverpod veya Provider gibi ek bir bağımlılık eklenmedi.
+          Bu, öğrenci projesinde durum akışını görünür ve test edilebilir tutar.
+        </p>
+      </div>
+      <div class="card">
+        <h4>Neden repository?</h4>
+        <p>
+          <span class="mono">TaskRepository</span>,
+          <span class="mono">FocusSessionRepository</span>,
+          <span class="mono">SettingsRepository</span>,
+          <span class="mono">FocusChainRepository</span> ve
+          <span class="mono">WalletRepository</span>, depolama ayrıntısını
+          gizler. UI ve iş mantığı <span class="mono">SharedPreferences</span>
+          anahtarlarını bilmez; bozuk JSON karşısında güvenli davranır.
+        </p>
+      </div>
+    </div>
+
+    <h3>Test edilebilirlik ve Android</h3>
+    <ul>
+      <li><strong>Enjekte edilen saat:</strong> <span class="mono">FocusTimerController</span> testlerde <span class="mono">clock</span> fonksiyonu alır; gerçek zamanda beklemek gerekmez.</li>
+      <li><strong>Enjekte edilen depolama:</strong> Testler bellek içi <span class="mono">SharedPreferences</span> kullanır; cihaz verisi kirlenmez.</li>
+      <li><strong>Dar ekran testi:</strong> 360×800 mantıksal pikselde beş sekme gezilir ve taşma istisnası aranır.</li>
+      <li><strong>Android markalama:</strong> uygulama adı “FocusFlow Proof”, launcher ikonu ve splash logosu proje varlıklarından üretilir.</li>
+      <li><strong>Fare tekerleği ve sürükleme:</strong> <span class="mono">_FocusFlowScrollBehavior</span>, masaüstü/emülatör deneyiminde fare ile kaydırmayı destekler.</li>
+    </ul>
+
+    <div class="callout">
+      <span class="callout-title">Ayrımın pratik sonucu</span>
+      <p>
+        Ekran kodu değiştiğinde kriptografi, depolama veya istatistik testleri
+        bozulmaz; tersine, doğrulayıcı değiştiğinde UI kodu değişmek zorunda
+        kalmaz. Bu ayrım, projenin hem okunabilir hem de genişletilebilir
+        kalmasının temel nedenidir.
+      </p>
+    </div>
+  </section>
+
+  <!-- 04 -->
+  <section class="section new-page">
+    <div class="section-head">
+      <div class="section-num">04</div>
+      <div>
+        <div class="eyebrow">Kod kalitesi</div>
+        <h2>Effective Dart: ilkeler ve kodda karşılığı</h2>
+      </div>
+    </div>
+
+    <p class="lead">
+      Effective Dart yalnızca “lint kurallarını geçmek” değildir; okunabilir,
+      tutarlı, null güvenli ve test edilebilir kod üretmektir. Projede dört
+      başlıkta somut karşılıklar vardır: stil, dokümantasyon, kullanım ve
+      tasarım.
+    </p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 17%;">Başlık</th>
+            <th style="width: 45%;">Uygulama</th>
+            <th>Kanıt</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Stil</strong></td>
+            <td>Sınıf/enum <span class="mono">UpperCamelCase</span>, üye <span class="mono">lowerCamelCase</span>, dosya <span class="mono">snake_case</span>; <span class="mono">final</span>/<span class="mono">const</span> yaygın; <span class="mono">dart format</span> temiz.</td>
+            <td>51 dosya, tek biçim; <span class="mono">const</span> tema renkleri ve model constructor’ları.</td>
+          </tr>
+          <tr>
+            <td><strong>Dokümantasyon</strong></td>
+            <td>Public sınıf ve metotlarda <span class="mono">///</span>; davranış, yan etki ve değişmezler açıklanır.</td>
+            <td><span class="mono">FocusTimerController</span>, <span class="mono">FocusChain</span>, <span class="mono">ChainValidator</span>, <span class="mono">RewardOffer</span>.</td>
+          </tr>
+          <tr>
+            <td><strong>Kullanım</strong></td>
+            <td>Null safety, pattern kontrolleri, enum + switch, extension, async/await, koleksiyon kısayolları, kaynak dispose.</td>
+            <td><span class="mono">ChainTransaction.fromJson</span>, <span class="mono">ChainTransactionTypeDetails</span>, <span class="mono">FocusTimerController.dispose</span>.</td>
+          </tr>
+          <tr>
+            <td><strong>Tasarım</strong></td>
+            <td>Katmanlı mimari, constructor injection, değişmez modeller, saf hesaplayıcılar, repository soyutlaması, testler.</td>
+            <td><span class="mono">AppController</span>, <span class="mono">StatisticsCalculator</span>, <span class="mono">TaskRepository</span>, <span class="mono">test/</span>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Kodda öne çıkan sekiz örnek</h3>
+
+    <h4>1. Enum’u veri taşıyan bir modele dönüştürmek</h4>
+    <p>
+      Ödül kataloğu ve rozetler, sabit listelerde dağınık string’ler yerine
+      alan taşıyan gelişmiş enum’lardır. <span class="mono">RewardOffer</span>
+      başlık, açıklama, maliyet ve ikon adını taşır;
+      <span class="mono">AchievementId</span> ayrıca ödül ve NFT kimliği üretir.
+      Bu, katalog ile UI arasındaki sözleşmeyi tip güvenli hale getirir.
+    </p>
+    <pre><code>enum RewardOffer {
+  coffeeBreak(
+    title: 'Kahve Molası',
+    description: 'Kendine bir kahve ısmarla ve 10 dakika ekrandan uzaklaş.',
+    cost: 10,
+    iconName: 'local_cafe',
+  ),
+  // ...
+}</code></pre>
+
+    <h4>2. Extension + kapsamlı switch</h4>
+    <p>
+      İşlem türlerinin kullanıcıya görünen adı, sistem mi yoksa harcama mı
+      olduğu tek bir extension’da toplanır. <span class="mono">switch</span>
+      ifadesi enum’un tüm değerlerini kapsar; yeni bir tür eklendiğinde
+      derleyici eksik dalı fark etmeye yardım eder.
+    </p>
+    <pre><code>extension ChainTransactionTypeDetails on ChainTransactionType {
+  String get label =&gt; switch (this) {
+    ChainTransactionType.genesis =&gt; 'Hoş geldin ödülü',
+    ChainTransactionType.focusReward =&gt; 'Odak ödülü',
+    // ...
+    ChainTransactionType.rewardRedemption =&gt; 'Ödül kullanımı',
+  };
+}</code></pre>
+
+    <h4>3. Null safety’yi sınırda ve gerçekten kullanmak</h4>
+    <p>
+      JSON’dan gelen alanlar <span class="mono">Object?</span> olarak okunur;
+      <span class="mono">is!</span> kontrolleriyle daraltılır. İşlem imzası ve
+      gönderici açık anahtarı yalnızca kullanıcı transferlerinde vardır; bu
+      yüzden <span class="mono">String?</span> olarak modellenir. Eksik imza
+      doğrulayıcıda açık bir hata mesajına dönüşür; null bir değer sessizce
+      kullanılmaz.
+    </p>
+    <pre><code>final id = json['id'];
+final amount = json['amount'];
+if (id is! String || id.trim().isEmpty) {
+  throw const FormatException('İşlem kimliği geçersiz.');
+}
+if (amount is! int || amount &lt;= 0) {
+  throw const FormatException('İşlem miktarı geçersiz.');
+}</code></pre>
+
+    <h4>4. Factory constructor ile geçerli nesne üretmek</h4>
+    <p>
+      <span class="mono">ChainTransaction.create</span> işlem gövdesini kanonik
+      JSON’a çevirip SHA-256 kimliğini üretir;
+      <span class="mono">ChainTransaction.fromJson</span> ise gelen kimliğin
+      gövdeyle uyuşup uyuşmadığını kontrol eder. Nesne oluşturulduğunda kimlik
+      ile içerik arasındaki ilişki zaten kurulmuştur.
+    </p>
+
+    <h4>5. Yardımcı sınıflarda <span class="mono">abstract final class</span></h4>
+    <p>
+      <span class="mono">MerkleTree</span>,
+      <span class="mono">FocusRewardCalculator</span>,
+      <span class="mono">StatisticsCalculator</span> ve
+      <span class="mono">CanonicalJson</span> gibi yalnızca statik yardımcılar
+      içeren sınıflar <span class="mono">abstract final class</span> olarak
+      tanımlanır. Böylece yanlışlıkla örneklenmeleri veya kalıtılmaları
+      engellenir.
+    </p>
+
+    <h4>6. Değişmezlik ve <span class="mono">unmodifiable</span> koleksiyonlar</h4>
+    <p>
+      <span class="mono">FocusChain</span> blok ve bekleyen işlem listelerini
+      <span class="mono">List.unmodifiable</span> olarak tutar; her yazma yeni
+      bir defter anlık görüntüsü üretir. <span class="mono">StudyTask</span>
+      <span class="mono">copyWith</span> ile güncellenir; isteğe bağlı alanları
+      null’a çekebilmek için özel bir <span class="mono">_absent</span>
+      sentinel’i kullanılır. Bu, UI’ın elindeki listeyi yanlışlıkla değiştirip
+      durumu bozmasını engeller.
+    </p>
+
+    <h4>7. Kaynak yaşam döngüsü ve dispose</h4>
+    <p>
+      <span class="mono">FocusTimerController.dispose()</span> timer’ı iptal
+      eder; <span class="mono">AnimatedBuilder</span> ve
+      <span class="mono">TextEditingController</span> kullanan widget’larda da
+      dinleyiciler serbest bırakılır. <span class="mono">WidgetsBindingObserver</span>
+      ile uygulama ön plana döndüğünde <span class="mono">syncNow()</span>
+      çağrılır; arka planda kalan süre kaybolmaz.
+    </p>
+
+    <h4>8. Test edilebilir tasarım</h4>
+    <p>
+      Servisler repository alır, sayaç saat fonksiyonu alır, saf hesaplayıcılar
+      yalnızca veriyle çalışır. Bu sayede 36 test; gerçek cihaz, ağ veya zaman
+      beklemeye ihtiyaç duymadan çalışır. Test dosyaları
+      <span class="mono">test/</span> altında üretim kodundan ayrı tutulur.
+    </p>
+
+    <h3>Biçim, lint ve analiz</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 33%;">Kontrol</th>
+            <th style="width: 24%;">Sonuç</th>
+            <th>Açıklama</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="mono">dart format lib test</span></td>
+            <td>Temiz</td>
+            <td>Tüm Dart dosyaları standart biçimde; elle hizalama yok.</td>
+          </tr>
+          <tr>
+            <td><span class="mono">flutter analyze</span></td>
+            <td>0 sorun</td>
+            <td><span class="mono">flutter_lints</span> etkin; uyarı veya hata yok.</td>
+          </tr>
+          <tr>
+            <td><span class="mono">flutter test</span></td>
+            <td>36/36</td>
+            <td>Birim, widget ve dar ekran smoke testleri başarılı.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout warn">
+      <span class="callout-title">Bilinçli ödünler</span>
+      <p>
+        JSON sınırında <span class="mono">Map&lt;String, dynamic&gt;</span>
+        kullanılır; çünkü <span class="mono">jsonDecode</span> dinamik bir yapı
+        döndürür. Değerler hemen tip kontrollerinden geçirilir ve alan modeline
+        aktarılır. Özel anahtar <span class="mono">shared_preferences</span>
+        içinde saklanır; bu demo için pratiktir ancak üretim ortamında donanım
+        destekli güvenli depolama (ör. Android Keystore) kullanılmalıdır. Bu
+        sınırlar raporda açıkça belirtilmiştir.
+      </p>
+    </div>
+  </section>
+
+  <!-- 05 -->
+  <section class="section new-page">
+    <div class="section-head">
+      <div class="section-num">05</div>
+      <div>
+        <div class="eyebrow">Kanıt katmanı</div>
+        <h2>Kanıt Defteri: yerel blok zinciri altyapısı</h2>
+      </div>
+    </div>
+
+    <p class="lead">
+      Kanıt Defteri, uygulamanın süsü değil yazma yoludur. Odak oturumu, görev,
+      rozet, transfer ve ödül kullanımı; işlem üretme, mempool, proof-of-work
+      madenciliği, kalıcılık ve doğrulama aşamalarından geçer. Yapı tek düğümlü
+      ve yereldir; gerçek bir P2P ağ veya dağıtık mutabakat iddiası yoktur.
+      Amaç, blok zinciri tekniklerini çalışan bir üründe göstermektir.
+    </p>
+
+    <div class="callout chain">
+      <span class="callout-title">Nerede kullanılıyor?</span>
+      <p>
+        <strong>Genesis</strong> hoş geldin ödülü; <strong>odak</strong> ve
+        <strong>görev</strong> ödülleri; <strong>rozet</strong> basımı;
+        <strong>blok</strong> coinbase ödülü; <strong>imzalı transfer</strong>;
+        <strong>ödül kullanımı</strong> ve <strong>kanıt gezgini</strong> aynı
+        defter servisinin farklı giriş noktalarıdır.
+      </p>
+    </div>
+
+    <h3>İşlem yaşam döngüsü</h3>
+    <div class="flow">
+      <div class="flow-step">
+        <h4>1. Kullanıcı eylemi</h4>
+        <p>Odak oturumu tamamlanır, görev işaretlenir, rozet hak edilir, transfer veya ödül kullanımı başlatılır.</p>
+      </div>
+      <div class="flow-step">
+        <h4>2. İşlem gövdesi</h4>
+        <p><span class="mono">ChainTransaction.create</span>; tür, adresler, miktar, zaman ve metadata’yı kanonik JSON’a çevirir.</p>
+      </div>
+      <div class="flow-step">
+        <h4>3. SHA-256 kimliği</h4>
+        <p>Kanonik gövdenin SHA-256 özeti işlem kimliği olur. Aynı içerik her platformda aynı kimliği üretir.</p>
+      </div>
+      <div class="flow-step">
+        <h4>4. İmza (harcamalarda)</h4>
+        <p>Transfer ve ödül kullanımı, cüzdanın Ed25519 özel anahtarıyla imzalanır; açık anahtar işleme eklenir.</p>
+      </div>
+      <div class="flow-step">
+        <h4>5. Mempool</h4>
+        <p>İşlem bekleyenler kuyruğuna alınır; önce kalıcı depoya yazılır, ancak başarılıysa bellekteki defter güncellenir.</p>
+      </div>
+      <div class="flow-step">
+        <h4>6. Proof-of-work bloğu</h4>
+        <p>Merkle kökü, önceki hash, nonce ve zorluk ile blok hash’i aranır; hash “000” ile başlayınca blok üretilir.</p>
+      </div>
+      <div class="flow-step">
+        <h4>7. Doğrulama ve kalıcılık</h4>
+        <p>Yeni defter doğrulayıcıdan geçirilir; hash, PoW, Merkle, imza ve bakiye kontrolleri başarılıysa saklanır.</p>
+      </div>
+    </div>
+
+    <h3>Veri modeli</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 19%;">Model</th>
+            <th>Alanlar ve rol</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>ChainTransaction</strong></td>
+            <td><span class="mono">id</span>, <span class="mono">type</span>, <span class="mono">fromAddress</span>, <span class="mono">toAddress</span>, <span class="mono">amount</span>, <span class="mono">timestamp</span>, <span class="mono">metadata</span>, <span class="mono">signature?</span>, <span class="mono">senderPublicKey?</span>. Kimlik, gövdenin kanonik JSON özetidir.</td>
+          </tr>
+          <tr>
+            <td><strong>ChainBlock</strong></td>
+            <td><span class="mono">index</span>, <span class="mono">timestamp</span>, <span class="mono">transactions</span>, <span class="mono">previousHash</span>, <span class="mono">hash</span>, <span class="mono">nonce</span>, <span class="mono">difficulty</span>, <span class="mono">minerAddress</span>. Merkle kökü işlemlerden türetilir.</td>
+          </tr>
+          <tr>
+            <td><strong>FocusChain</strong></td>
+            <td>Bloklar, bekleyen işlemler, cüzdan adresi ve zorluk. Tüm listeler salt okunur; her değişiklik yeni bir anlık görüntü üretir.</td>
+          </tr>
+          <tr>
+            <td><strong>WalletAccount</strong></td>
+            <td>Adres, base64 açık anahtar ve base64 özel anahtar. Adres; açık anahtarın SHA-256 özetinin ilk 20 baytından türetilir.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Kriptografik bileşenler</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 22%;">Bileşen</th>
+            <th style="width: 35%;">Ne yapıyor?</th>
+            <th>Nerede?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>SHA-256</strong></td>
+            <td>İşlem kimliği, blok hash’i ve kanonik JSON özeti üretir.</td>
+            <td><span class="mono">canonical_json.dart</span>, <span class="mono">chain_transaction.dart</span>, <span class="mono">chain_block.dart</span></td>
+          </tr>
+          <tr>
+            <td><strong>Kanonik JSON</strong></td>
+            <td>Harita anahtarlarını sıralar; aynı içeriğin platformdan bağımsız aynı baytları üretmesini sağlar.</td>
+            <td><span class="mono">blockchain/utils/canonical_json.dart</span></td>
+          </tr>
+          <tr>
+            <td><strong>Merkle ağacı</strong></td>
+            <td>İşlem kimliklerini ikili eşleştirip tek bir kök hash’e indirger; blok başlığını sabit boyutta tutar.</td>
+            <td><span class="mono">blockchain/utils/merkle_tree.dart</span></td>
+          </tr>
+          <tr>
+            <td><strong>Proof-of-work</strong></td>
+            <td>Blok hash’inin başında zorluk kadar sıfır aranır. Varsayılan zorluk 3’tür; hedef <span class="mono">000</span> ile başlar.</td>
+            <td><span class="mono">ChainBlock.mine</span>, <span class="mono">FocusChainNetwork.difficultyTarget</span></td>
+          </tr>
+          <tr>
+            <td><strong>Ed25519</strong></td>
+            <td>Cüzdan anahtar çifti; transfer ve ödül kullanımı imzası; açık anahtarla doğrulama.</td>
+            <td><span class="mono">wallet_service.dart</span>, <span class="mono">chain_validator.dart</span></td>
+          </tr>
+          <tr>
+            <td><strong>Hash bağlantısı</strong></td>
+            <td>Her blok <span class="mono">previousHash</span> ile öncekine bağlanır; sonradan değişen bir işlem tüm sonraki bağlantıları geçersiz kılar.</td>
+            <td><span class="mono">FocusChain.minePendingTransactions</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Bir blok nasıl üretiliyor?</h3>
+    <ol>
+      <li>Bekleyen işlemler ve 1 FOCUS’luk coinbase işlemi bir araya getirilir.</li>
+      <li>İşlem kimliklerinden Merkle kökü hesaplanır.</li>
+      <li>Blok başlığı; indeks, zaman, önceki hash, Merkle kökü, nonce, zorluk ve madenci adresinden oluşturulur.</li>
+      <li>Başlık kanonik JSON’a çevrilir ve SHA-256 ile hash’lenir.</li>
+      <li>Hash hedefle başlamıyorsa nonce artırılır ve döngü tekrarlanır.</li>
+      <li>Hedef yakalandığında blok oluşturulur; işlemler ve nonce değişmez şekilde saklanır.</li>
+      <li>Defter kalıcı depoya yazılır; doğrulayıcı tüm zinciri yeniden kontrol eder.</li>
+    </ol>
+
+    <pre><code>static String _calculateHash({
+  required int index,
+  required int timestamp,
+  required String previousHash,
+  required String merkleRoot,
+  required int nonce,
+  required int difficulty,
+  required String minerAddress,
+}) {
+  final payload = &lt;String, Object?&gt;{
+    'index': index,
+    'timestamp': timestamp,
+    'previousHash': previousHash,
+    'merkleRoot': merkleRoot,
+    'nonce': nonce,
+    'difficulty': difficulty,
+    'minerAddress': minerAddress,
+  };
+  return sha256Hex(canonicalJsonEncode(payload));
+}</code></pre>
+    <p class="code-caption">ChainBlock — blok hash’i, başlığın kanonik JSON özetidir; işlem listesi Merkle kökü üzerinden temsil edilir.</p>
+
+    <h3>Doğrulayıcı neleri kontrol ediyor?</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 34%;">Kontrol</th>
+            <th>Yakalanan hata</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Genesis indeksi ve önceki hash</td>
+            <td>Defterin sıfır indeksli, doğru başlangıç hash’li genesis ile başlamaması.</td>
+          </tr>
+          <tr>
+            <td>Blok sırası</td>
+            <td>Eksik veya yinelenen indeks; zincirin kopması.</td>
+          </tr>
+          <tr>
+            <td><span class="mono">previousHash</span> bağlantısı</td>
+            <td>Bir bloğun önceki blokla bağlantılı olmaması.</td>
+          </tr>
+          <tr>
+            <td>Blok hash’i</td>
+            <td>İçerik değiştiği halde hash’in yeniden hesaplanmaması.</td>
+          </tr>
+          <tr>
+            <td>Proof-of-work hedefi</td>
+            <td>Hash’in zorluk kadar sıfırla başlamaması.</td>
+          </tr>
+          <tr>
+            <td>Merkle kökü</td>
+            <td>İşlem listesinin blok başlığındaki kökle uyuşmaması.</td>
+          </tr>
+          <tr>
+            <td>İşlem kimliği</td>
+            <td>Aynı kimliğin birden fazla kez kullanılması veya gövdenin kimlikle uyuşmaması.</td>
+          </tr>
+          <tr>
+            <td>Ed25519 imzası</td>
+            <td>Harcama işleminde imzanın eksik, geçersiz veya yanlış anahtara ait olması.</td>
+          </tr>
+          <tr>
+            <td>Adres ve bakiye</td>
+            <td>Geçersiz adres, kendi adresine transfer, yetersiz bakiye.</td>
+          </tr>
+          <tr>
+            <td>Rozet ve ödül metadata’sı</td>
+            <td>Aynı rozetin iki kez basılması; ödül kullanımında <span class="mono">rewardId</span> eksikliği.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Kurcalama demosu</h3>
+    <p>
+      Kanıt ekranındaki <strong>“Defteri kurcala”</strong> işlemi, kalıcı veriye
+      dokunmadan son bloğun ilk ödül işleminin miktarını değiştirir. İşlem
+      kimliği yeniden hesaplanır ancak eski imza ve blok hash’i korunur.
+      Doğrulayıcı önce hash uyuşmazlığını yakalar; dolayısıyla hem işlem
+      bütünlüğü hem de blok bütünlüğü bozulur. Cüzdan bakiyesi bu sırada
+      <span class="mono">_chainBackup</span> üzerinden sağlam defterden okunur,
+      yazma işlemleri kilitlenir. <strong>“Sağlam deftere dön”</strong> ile
+      yedek geri yüklenir ve doğrulama yeniden yeşile döner.
+    </p>
+
+    <div class="callout">
+      <span class="callout-title">Neden bu kadar detay?</span>
+      <p>
+        Bir yarışma demosunda “blockchain var” demek yeterli değildir; işlem
+        üretimi, madencilik, imza, doğrulama ve kurcalama tespitinin aynı akışta
+        görünmesi gerekir. Bu proje, yerel ve küçük ölçekli olsa da blok zinciri
+        fikirlerinin tamamını çalışan kodda gösterir.
+      </p>
+    </div>
+  </section>
+
+  <!-- 06 -->
+  <section class="section new-page">
+    <div class="section-head">
+      <div class="section-num">06</div>
+      <div>
+        <div class="eyebrow">Motivasyon döngüsü</div>
+        <h2>Ödül Mağazası: FOCUS’un harcanma yeri</h2>
+      </div>
+    </div>
+
+    <p class="lead">
+      FOCUS kazanmak tek başına bir amaç değildir. Cüzdanın anlamlı olması için
+      kazanılan birimin harcanabileceği bir yer gerekir. Ödül Mağazası bu
+      boşluğu doldurur: kullanıcı kendi emeğiyle kazandığı FOCUS’u kahve
+      molası, dizi, oyun veya dinlenme gününe dönüştürür.
+    </p>
+
+    <div class="reward-grid">
+      <div class="reward-card">
+        <div class="cost">10 FOCUS</div>
+        <h4>Kahve Molası</h4>
+        <p>Kendine bir kahve ısmarla ve 10 dakika ekrandan uzaklaş.</p>
+      </div>
+      <div class="reward-card">
+        <div class="cost">20 FOCUS</div>
+        <h4>Bir Bölüm Dizi</h4>
+        <p>Hak ettiğin bir bölümü izle, zihnini dinlendir.</p>
+      </div>
+      <div class="reward-card">
+        <div class="cost">30 FOCUS</div>
+        <h4>Oyun Molası</h4>
+        <p>45 dakika oyun oyna veya sevdiğin bir yeri gez.</p>
+      </div>
+      <div class="reward-card">
+        <div class="cost">50 FOCUS</div>
+        <h4>Dinlenme Günü</h4>
+        <p>Bir günü tamamen dinlenmeye ayır; deftere de bunu yaz.</p>
+      </div>
+    </div>
+
+    <h3>Kullanım akışı</h3>
+    <div class="flow">
+      <div class="flow-step">
+        <h4>1. Ödül seçimi</h4>
+        <p>Kullanıcı bakiyesi yeterli olan bir ödülün “Kullan” düğmesine dokunur; yetersizse düğme kilitli görünür.</p>
+      </div>
+      <div class="flow-step">
+        <h4>2. Onay dialogu</h4>
+        <p>Maliyet ve işlemin cihazdaki Ed25519 anahtarıyla imzalanacağı açıkça belirtilir; bunun gerçek para olmadığı vurgulanır.</p>
+      </div>
+      <div class="flow-step">
+        <h4>3. Bakiye ve durum kontrolü</h4>
+        <p>Defter kurcalanmışsa işlem engellenir. Geçerliyse <span class="mono">rewardRedemption</span> işlemi üretilir.</p>
+      </div>
+      <div class="flow-step">
+        <h4>4. İmza ve yakma adresi</h4>
+        <p>İşlem, <span class="mono">FOCUSFLOW_BURN</span> adresine gönderilir. Bu adres kullanıcı adresi değildir; doğrulayıcı yalnızca ödül kullanımında özel olarak kabul eder.</p>
+      </div>
+      <div class="flow-step">
+        <h4>5. Blok ve coinbase</h4>
+        <p>İşlem mempool’a girer, proof-of-work bloğuna yazılır. Madenci 1 FOCUS blok ödülü kazanır.</p>
+      </div>
+      <div class="flow-step">
+        <h4>6. Geçmiş ve geri bildirim</h4>
+        <p>Kullanım sayısı ve işlem kısa hash’i anlık bildirimde; tüm kayıt “Kullanılan ödüller” listesinde görünür.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <span class="callout-title">Örnek bakiye akışı</span>
+      <p>
+        Cüzdanda <strong>22 FOCUS</strong> varken 10 FOCUS’luk Kahve Molası
+        kullanıldığında bakiye önce 12’ye düşer; aynı işlemde üretilen blokun
+        1 FOCUS coinbase ödülüyle <strong>13 FOCUS</strong> olur. Ekranda
+        “1 kullanım” ve işlem hash’i görünür. Net değişim
+        <span class="mono">-10 + 1 = -9</span> FOCUS’tur.
+      </p>
+    </div>
+
+    <h3>Çalışan arayüzden görüntüler</h3>
+    <div class="shots">
+      <figure class="shot">
+        <img src="rapor-gorselleri/cuzdan.png" alt="FocusFlow Proof cüzdan ekranı">
+        <figcaption><strong>Cüzdan.</strong> Bakiye, toplam kazanılan/harcanan, Ödül Mağazası girişi ve rozetler aynı ekranda.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="rapor-gorselleri/odul-magazasi.png" alt="Ödül Mağazası ekranı">
+        <figcaption><strong>Ödül Mağazası.</strong> 22 FOCUS bakiye; 10 ve 20 FOCUS’luk ödüller kullanılabilir, 30 ve 50 kilitli.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="rapor-gorselleri/odul-kullanildi.png" alt="Ödül kullanıldıktan sonraki ekran">
+        <figcaption><strong>Kullanım sonrası.</strong> Kahve Molası sonrası bakiye 13 FOCUS; “1 kullanım” ve işlem hash’i görünür.</figcaption>
+      </figure>
+    </div>
+    <p class="small">
+      Görüntüler Android API 36 emülatöründe, uygulamanın gerçek verisiyle
+      alınmıştır. Üçüncü görüntüdeki 22 → 13 düşüşü, 10 FOCUS maliyet ve 1
+      FOCUS blok ödülüyle açıklanır.
+    </p>
+
+    <h3>Cüzdanın amacı netleşti</h3>
+    <p>
+      Ödül Mağazası öncesinde FOCUS yalnızca birikiyor ve “ne işe yarıyor?”
+      sorusunu tam yanıtlamıyordu. Artık cüzdan üç işlevi birlikte gösterir:
+      <strong>kazan</strong> (odak, görev, rozet, blok), <strong>harca</strong>
+      (dört yerel ödül) ve <strong>kanıtla</strong> (imzalı transfer, yakma
+      işlemi, işlem geçmişi). Cüzdan ekranındaki <span class="mono">HARCANAN</span>
+      metriği, harcamaların transferlerle birlikte toplamını gösterir.
+    </p>
+
+    <div class="two-col">
+      <div class="card">
+        <h4>Transfer</h4>
+        <p>
+          Kullanıcı geçerli bir <span class="mono">0x</span> adresine FOCUS
+          gönderebilir. İşlem, cüzdanın Ed25519 özel anahtarıyla imzalanır;
+          alıcı adresi, bakiye ve bekleyen giden işlemler kontrol edilir.
+          Transfer ücreti yoktur.
+        </p>
+      </div>
+      <div class="card">
+        <h4>Yakma adresi</h4>
+        <p>
+          Ödül kullanımı, FOCUS’u <span class="mono">FOCUSFLOW_BURN</span>
+          adresine gönderir. Bu, arzı azaltan ve harcamayı kalıcı bir kanıta
+          dönüştüren yerel bir muhasebe kuralıdır; gerçek bir dış ağa bağlanmaz.
+        </p>
+      </div>
+    </div>
+
+    <div class="callout warn">
+      <span class="callout-title">FOCUS nedir, ne değildir?</span>
+      <p>
+        FOCUS, uygulama içi motivasyon birimidir; alınıp satılamaz, gerçek para
+        değeri yoktur ve cüzdanlar arası transfer yalnızca demo amaçlıdır.
+        Ödüller de yerel öz-ödüllerdir: uygulama “kahve al” demez, kullanıcının
+        kendine mola vermesini kayıt altına alır.
+      </p>
+    </div>
+  </section>
+
+  <!-- 07 -->
+  <section class="section new-page">
+    <div class="section-head">
+      <div class="section-num">07</div>
+      <div>
+        <div class="eyebrow">Kanıt ve sınırlar</div>
+        <h2>Doğrulama, testler ve bilinen sınırlar</h2>
+      </div>
+    </div>
+
+    <p class="lead">
+      Raporun bu bölümü yalnızca başarıları değil, doğrulama yöntemini ve
+      ürünün bilinçli sınırlarını da kayda geçirir. Amaç, sonuçların
+      tekrarlanabilir olması ve gelecekteki geliştirmelerin nereden başlayacağının
+      açık olmasıdır.
+    </p>
+
+    <h3>Çalıştırılan kontroller</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 32%;">Komut / ortam</th>
+            <th style="width: 20%;">Sonuç</th>
+            <th>Not</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="mono">dart format lib test</span></td>
+            <td>Temiz</td>
+            <td>Biçimlendirme değişikliği gerekmedi.</td>
+          </tr>
+          <tr>
+            <td><span class="mono">flutter analyze</span></td>
+            <td>0 sorun</td>
+            <td>2,3 saniyede tamamlandı; hata, uyarı veya bilgi yok.</td>
+          </tr>
+          <tr>
+            <td><span class="mono">flutter test</span></td>
+            <td>36/36</td>
+            <td>Yaklaşık 5 saniyede tamamlandı; tüm testler geçti.</td>
+          </tr>
+          <tr>
+            <td><span class="mono">flutter build apk --debug</span></td>
+            <td>Başarılı</td>
+            <td>Hata ayıklama APK’sı üretildi ve emülatöre kuruldu.</td>
+          </tr>
+          <tr>
+            <td>Android API 36 emülatörü</td>
+            <td>Doğrulandı</td>
+            <td>Beş sekme, cüzdan, Ödül Mağazası, ödül kullanımı, kurcalama ve geri yükleme denendi.</td>
+          </tr>
+          <tr>
+            <td>360×800 dar ekran</td>
+            <td>Taşma yok</td>
+            <td>Widget smoke testi beş sekmeyi gezip istisna arar.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Test dağılımı</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 37%;">Test dosyası</th>
+            <th style="width: 12%;">Test</th>
+            <th>Kapsam</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="mono">blockchain_test.dart</span></td>
+            <td>10</td>
+            <td>Genesis, odak ödülü, blok kurcalama, imzalı transfer, yetersiz bakiye, rozet, ödül hesaplayıcı, kalıcılık, ödül kullanımı ve kurcalama sırasında cüzdan bakiyesi.</td>
+          </tr>
+          <tr>
+            <td><span class="mono">app_smoke_test.dart</span></td>
+            <td>3</td>
+            <td>Beş sekme dar ekranda; cüzdandan Ödül Mağazası’na geçiş; ayarlar ve istatistik sayfaları.</td>
+          </tr>
+          <tr>
+            <td><span class="mono">duration_formatter_test.dart</span></td>
+            <td>4</td>
+            <td>Sayaç biçimi, sınır değerler, negatif değer ve okunabilir süre metni.</td>
+          </tr>
+          <tr>
+            <td><span class="mono">focus_timer_controller_test.dart</span></td>
+            <td>3</td>
+            <td>Hedef zamana göre tamamlanma ve tek kayıt; mod değişimi; ayar değişikliğinin yalnızca boştaki sayaca uygulanması.</td>
+          </tr>
+          <tr>
+            <td><span class="mono">statistics_calculator_test.dart</span></td>
+            <td>5</td>
+            <td>Tamamlanmış odak filtreleme, günlük toplam, son yedi gün, bugünkü görev ve bekleyen/tamamlanan sayıları.</td>
+          </tr>
+          <tr>
+            <td><span class="mono">study_task_test.dart</span></td>
+            <td>7</td>
+            <td>Başlık doğrulama, JSON geri yükleme, geçersiz JSON, <span class="mono">copyWith</span> null temizleme ve tamamlama zaman damgası.</td>
+          </tr>
+          <tr>
+            <td><span class="mono">task_repository_test.dart</span></td>
+            <td>3</td>
+            <td>Kaydetme/yükleme, bozuk kayıt ve geçersiz görev atlama.</td>
+          </tr>
+          <tr>
+            <td><span class="mono">widget_test.dart</span></td>
+            <td>1</td>
+            <td>Uygulamanın ana gezinme ile açılması.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Manuel doğrulama senaryoları</h3>
+    <ul class="check-list">
+      <li><strong>İlk açılış:</strong> genesis bloğu, 10 FOCUS hoş geldin ödülü ve yerel cüzdan adresi oluştu.</li>
+      <li><strong>Odak ve görev ödülü:</strong> tamamlanan oturum/görev sonrası bakiye arttı; işlem ve blok Kanıt sekmesinde göründü.</li>
+      <li><strong>Ödül kullanımı:</strong> 22 FOCUS iken 10 FOCUS’luk Kahve Molası kullanıldı; bakiye 13’e indi, “1 kullanım” ve başarı bildirimi göründü.</li>
+      <li><strong>Kurcalama:</strong> son blok işlemi değiştirildi; doğrulama hata verdi. Cüzdan bakiyesi sağlam kaldı; yazma işlemleri engellendi. Sağlam deftere dönüşte doğrulama yeniden geçti.</li>
+      <li><strong>Dar ekran:</strong> 360×800 mantıksal pikselde beş sekme ve Ödül Mağazası taşmadan gezildi.</li>
+      <li><strong>Fare kaydırma:</strong> emülatörde tekerlek ve sol tuşla sürükleme ile dikey kaydırma çalıştı.</li>
+    </ul>
+
+    <h3>Bilinen sınırlar</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 31%;">Sınır</th>
+            <th>Etki ve gerekçe</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Tek düğümlü yerel defter</td>
+            <td>P2P ağ, düğümler arası mutabakat veya blok yayılımı yoktur. Amaç, blok zinciri tekniklerini cihazda göstermektir.</td>
+          </tr>
+          <tr>
+            <td>Gerçek para yok</td>
+            <td>FOCUS alınıp satılamaz; transfer ve ödüller yalnızca uygulama içi demodur.</td>
+          </tr>
+          <tr>
+            <td>Özel anahtarın depolanması</td>
+            <td>Demo için <span class="mono">shared_preferences</span> kullanılır. Üretimde Android Keystore / güvenli depolama gerekir.</td>
+          </tr>
+          <tr>
+            <td>Arka plan alarmı yok</td>
+            <td>Uygulama kapatılırsa devam eden oturum kaldığı yerden sürmez; tamamlanmış oturumlar ve defter kalıcıdır.</td>
+          </tr>
+          <tr>
+            <td>Bildirim yok</td>
+            <td>Süre bitince yalnızca uygulama içi durum güncellenir; push/yerel bildirim eklenmemiştir.</td>
+          </tr>
+          <tr>
+            <td>Kurcalama yalnızca bellekte</td>
+            <td>Demo kopyası kalıcı depoya yazılmaz; gerçek veri bozulmaz. Bu bilinçli bir güvenlik tercihidir.</td>
+          </tr>
+          <tr>
+            <td>Hata ayıklama APK’sı</td>
+            <td>Yayın imzası ve mağaza dağıtımı bu raporun kapsamı dışındadır.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Sonraki adımlar</h3>
+    <div class="two-col">
+      <div class="card">
+        <h4>Ürün</h4>
+        <ul>
+          <li>Yerel bildirim ve arka plan zamanlayıcı</li>
+          <li>Haftalık/aylık hedefler ve seri takibi</li>
+          <li>Ödül kataloğunu kullanıcı tanımlı hale getirme</li>
+          <li>Tablet ve katlanabilir ekranlar için uyarlanabilir yerleşim</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Teknik</h4>
+        <ul>
+          <li>Android Keystore ile anahtar koruması</li>
+          <li>Şifreli yerel yedekleme ve dışa aktarma</li>
+          <li>Release imzası ve sürüm pipeline’ı</li>
+          <li>Daha fazla entegrasyon ve erişilebilirlik testi</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 -->
+  <section class="section new-page">
+    <div class="section-head">
+      <div class="section-num">08</div>
+      <div>
+        <div class="eyebrow">Kapanış</div>
+        <h2>Sonuç ve değerlendirme</h2>
+      </div>
+    </div>
+
+    <p class="lead">
+      FocusFlow Proof; odak takibi, görev yönetimi, istatistik, yerel
+      kriptografik kanıt ve harcanabilir bir ödül ekonomisini tek bir Android
+      uygulamasında birleştirdi. Projenin en güçlü yanı, bu parçaların ayrı ayrı
+      demo ekranları olarak değil, aynı veri akışının parçaları olarak
+      çalışmasıdır.
+    </p>
+
+    <h3>Ne başardık?</h3>
+    <ul class="check-list">
+      <li><strong>Dart’ı uçtan uca kullandık:</strong> UI, durum, iş kuralları, depolama, kriptografi, testler ve Android markalaması aynı dil içinde kaldı.</li>
+      <li><strong>Effective Dart’ı görünür kıldık:</strong> isimlendirme, null safety, enum/switch, extension, factory, değişmezlik, dispose, dokümantasyon ve test edilebilir tasarım kodda somutlaştı.</li>
+      <li><strong>Blok zincirini merkeze koyduk:</strong> her ödül ve harcama; işlem kimliği, Merkle kökü, proof-of-work, Ed25519 imzası ve doğrulamadan geçiyor.</li>
+      <li><strong>Cüzdana amaç verdik:</strong> FOCUS artık yalnızca biriken bir sayı değil; dört yerel ödüle dönüşen, her adımı defterde izlenen bir motivasyon aracı.</li>
+      <li><strong>Ölçülebilir kalite bıraktık:</strong> 36 test, sıfır analiz sorunu, temiz format, çalışan APK ve emülatörde doğrulanmış akışlar.</li>
+    </ul>
+
+    <h3>Teknik değerlendirme</h3>
+    <p>
+      Projenin mimarisi küçük ölçekli bir üretim uygulamasına benzer biçimde
+      ayrılmıştır: ekranlar iş kuralı içermez, servisler depolama ayrıntısını
+      bilmez, modeller JSON sınırında doğrulanır. Bu ayrım sayesinde sayaç,
+      istatistik ve blok zinciri birbirinden bağımsız test edilebilir. Buna
+      karşın proje bir yarışma demosu olduğu için bazı ödünler bilinçlidir:
+      tek düğüm, yerel depolama ve hata ayıklama imzası. Bu sınırlar gizlenmek
+      yerine raporun 7. bölümünde açıkça listelenmiştir.
+    </p>
+    <p>
+      Blok zinciri tarafında özellikle üç nokta öne çıkar: kanonik JSON ile
+      deterministik hash üretimi, Merkle kökü ile işlem bütünlüğünün tek bir
+      değere indirgenmesi ve kurcalama demosunun cüzdan bakiyesini bozmadan
+      hatayı göstermesi. Bu üçü, projenin “blockchain görünümlü” bir arayüzden
+      değil, gerçek bir doğrulama akışından oluştuğunu gösterir.
+    </p>
+
+    <h3>Kazanımlar</h3>
+    <div class="two-col">
+      <div class="card">
+        <h4>Mühendislik</h4>
+        <ul>
+          <li>Katmanlı Flutter mimarisi</li>
+          <li>ChangeNotifier ile merkezi durum</li>
+          <li>Repository deseni ve hata toleranslı JSON</li>
+          <li>Kriptografik doğrulama ve test</li>
+          <li>Android build ve emülatör doğrulaması</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Ürün</h4>
+        <ul>
+          <li>Türkçe, tutarlı ve markalı arayüz</li>
+          <li>Kapalı motivasyon döngüsü</li>
+          <li>Şeffaf defter ve kurcalama demosu</li>
+          <li>Dar ekran ve fare etkileşimi</li>
+          <li>Anlamlı cüzdan ve ödül ekonomisi</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout dark">
+      <span class="callout-title">Kısa özet</span>
+      <p>
+        FocusFlow Proof, bir Pomodoro uygulamasının ötesine geçerek “çalıştığımı
+        kanıtla ve emeğimi ödüllendir” fikrini yerel, denetlenebilir ve
+        sunucusuz bir deneyime dönüştürür. Dart bu deneyimin her katmanında;
+        Kanıt Defteri ise ürünün en kritik yazma yolunda yer alır.
+      </p>
+    </div>
+
+    <p class="footer-note">
+      <span class="end-mark"></span>
+      FocusFlow Proof · Teknik Proje Raporu · Sürüm 2.0.0+2 · 24 Ekim 2026
+      <br>
+      Bu rapor, projenin mevcut kaynak kodu ve test sonuçları üzerinden
+      hazırlanmıştır. Uygulama yerel bir demodur; FOCUS’un gerçek para değeri
+      yoktur.
+    </p>
+  </section>
+
+  <!-- EK A -->
+  <section class="section new-page">
+    <div class="section-head">
+      <div class="section-num">A</div>
+      <div>
+        <div class="eyebrow">Başvuru</div>
+        <h2>Dosya haritası ve teknik sabitler</h2>
+      </div>
+    </div>
+
+    <h3>Kritik dosyalar</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 44%;">Dosya</th>
+            <th>Sorumluluk</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="mono">lib/main.dart</span></td>
+            <td>SharedPreferences, repository’ler, servisler ve AppController’ın kompozisyonu.</td>
+          </tr>
+          <tr>
+            <td><span class="mono">lib/app.dart</span></td>
+            <td>MaterialApp, tema, yerelleştirme, splash, beş sekmeli kabuk ve scroll davranışı.</td>
+          </tr>
+          <tr>
+            <td><span class="mono">lib/state/app_controller.dart</span></td>
+            <td>Görev, oturum, ayar ve defter durumunun merkezi koordinasyonu.</td>
+          </tr>
+          <tr>
+            <td><span class="mono">lib/features/focus/focus_timer_controller.dart</span></td>
+            <td>Pomodoro durumu, hedef bitiş zamanı, tek seferlik tamamlanma ve dispose.</td>
+          </tr>
+          <tr>
+            <td><span class="mono">lib/features/statistics/statistics_calculator.dart</span></td>
+            <td>Odak ve görev istatistiklerinin saf hesaplanması.</td>
+          </tr>
+          <tr>
+            <td><span class="mono">lib/blockchain/models/chain_transaction.dart</span></td>
+            <td>İşlem türleri, kanonik kimlik, imza ve JSON doğrulaması.</td>
+          </tr>
+          <tr>
+            <td><span class="mono">lib/blockchain/models/chain_block.dart</span></td>
+            <td>Blok başlığı, Merkle kökü, proof-of-work madenciliği ve hash doğrulaması.</td>
+          </tr>
+          <tr>
+            <td><span class="mono">lib/blockchain/services/chain_validator.dart</span></td>
+            <td>Hash, PoW, Merkle, imza, bakiye ve metadata kontrolleri.</td>
+          </tr>
+          <tr>
+            <td><span class="mono">lib/blockchain/state/focus_chain_service.dart</span></td>
+            <td>Genesis, ödül, transfer, ödül kullanımı, madencilik, kalıcılık ve kurcalama.</td>
+          </tr>
+          <tr>
+            <td><span class="mono">lib/features/rewards/rewards_page.dart</span></td>
+            <td>Ödül Mağazası, onay dialogu, bakiye kontrolü ve kullanım geçmişi.</td>
+          </tr>
+          <tr>
+            <td><span class="mono">lib/models/reward_offer.dart</span></td>
+            <td>Dört ödülün başlık, açıklama, maliyet ve ikon bilgisi.</td>
+          </tr>
+          <tr>
+            <td><span class="mono">test/blockchain_test.dart</span></td>
+            <td>Blok zinciri, imza, ödül kullanımı ve kurcalama testleri.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Teknik sabitler ve formüller</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 36%;">Sabit / formül</th>
+            <th>Değer</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Hoş geldin ödülü</td>
+            <td>10 FOCUS</td>
+          </tr>
+          <tr>
+            <td>Odak ödülü</td>
+            <td><span class="mono">seconds &gt; 0 ? max(1, (seconds ~/ 300) * 1) : 0</span></td>
+          </tr>
+          <tr>
+            <td>Görev ödülü</td>
+            <td>2 FOCUS</td>
+          </tr>
+          <tr>
+            <td>Blok ödülü</td>
+            <td>1 FOCUS (coinbase)</td>
+          </tr>
+          <tr>
+            <td>Proof-of-work zorluğu</td>
+            <td>3 → blok hash’i <span class="mono">000</span> ile başlar</td>
+          </tr>
+          <tr>
+            <td>Genesis önceki hash</td>
+            <td>64 sıfır</td>
+          </tr>
+          <tr>
+            <td>Cüzdan adresi</td>
+            <td><span class="mono">0x</span> + SHA-256(açık anahtar)’ın ilk 20 baytı (40 hex)</td>
+          </tr>
+          <tr>
+            <td>Sistem adresi</td>
+            <td><span class="mono">FOCUSFLOW_SYSTEM</span></td>
+          </tr>
+          <tr>
+            <td>Yakma adresi</td>
+            <td><span class="mono">FOCUSFLOW_BURN</span></td>
+          </tr>
+          <tr>
+            <td>Bakiye</td>
+            <td>Gelen işlemlerin toplamı − giden işlemlerin toplamı (onaylı bloklar)</td>
+          </tr>
+          <tr>
+            <td>Ödül kullanımı net etkisi</td>
+            <td><span class="mono">−maliyet + 1 FOCUS</span> (aynı işlemde blok ödülü)</td>
+          </tr>
+          <tr>
+            <td>Rozet toplam potansiyeli</td>
+            <td>103 FOCUS (8 rozet)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Kısa sözlük</h3>
+    <div class="glossary">
+      <div class="glossary-item">
+        <h4>Kanonik JSON</h4>
+        <p>Anahtar sırası sabitlenmiş, platformdan bağımsız JSON metni; hash’in deterministik olmasını sağlar.</p>
+      </div>
+      <div class="glossary-item">
+        <h4>Merkle kökü</h4>
+        <p>İşlem kimliklerinin ikili ağaçta hash’lenmesiyle elde edilen tek özet değer.</p>
+      </div>
+      <div class="glossary-item">
+        <h4>Proof-of-work</h4>
+        <p>Blok hash’inin belirli bir zorluk hedefini karşılaması için nonce aranması.</p>
+      </div>
+      <div class="glossary-item">
+        <h4>Mempool</h4>
+        <p>Henüz bir bloğa alınmamış, onay bekleyen işlemler kuyruğu.</p>
+      </div>
+      <div class="glossary-item">
+        <h4>Genesis bloğu</h4>
+        <p>Defterin sıfır indeksli ilk bloğu; hoş geldin ödülünü taşır.</p>
+      </div>
+      <div class="glossary-item">
+        <h4>Coinbase</h4>
+        <p>Blok üreten madenciye verilen sistem ödülü; bu projede 1 FOCUS.</p>
+      </div>
+      <div class="glossary-item">
+        <h4>Ed25519</h4>
+        <p>Hızlı ve güvenli imza algoritması; cüzdan anahtar çifti ve işlem imzaları için kullanılır.</p>
+      </div>
+      <div class="glossary-item">
+        <h4>Yakma adresi</h4>
+        <p>Ödül kullanımında FOCUS’un gönderildiği, kullanıcı adresi olmayan sistem adresi.</p>
+      </div>
+    </div>
+
+    <p class="footer-note">
+      <span class="end-mark"></span>
+      Bu raporun kaynağı: <span class="mono">docs/FocusFlow_Proof_Proje_Raporu.html</span>.
+      PDF, Microsoft Edge başsız yazdırma ile A4 olarak üretilmiştir.
+    </p>
+  </section>
+
+</body>
+</html>
