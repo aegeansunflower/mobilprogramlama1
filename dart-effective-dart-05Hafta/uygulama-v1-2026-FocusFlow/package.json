@@ -1,0 +1,17 @@
+{
+  "name": "mobil-programlama-dersi-1",
+  "version": "1.0.0",
+  "description": "FocusFlow, öğrencilerin çalışma sürelerini planlamasına, Pomodoro odak oturumları yürütmesine, görevlerini takip etmesine ve ilerlemesini gerçek kayıtlardan görmesine yardımcı olan Türkçe bir Flutter uygulamasıdır.",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
