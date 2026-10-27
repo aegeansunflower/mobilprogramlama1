@@ -119,27 +119,48 @@ DayPlanner/
 │       └── task_card.dart
 ├── pubspec.yaml
 └── README.md
-<details>
-<summary><strong>📁 Klasörlerin görevleri</strong></summary>
-
-Dizin	Sorumluluk
-models/	Görev, rutin, kategori ve günlük özet veri modelleri
-providers/	Uygulama durumunun yönetilmesi ve ekranlara aktarılması
-screens/	Ana sayfalar ve ekran düzeyindeki arayüzler
-services/	Örnek veriler ve yerel depolama işlemleri
-theme/	Material 3 aydınlık ve karanlık tema tanımları
-widgets/	Ekranlar arasında yeniden kullanılan arayüz bileşenleri
-
+```
 
 </details>
 
-👥 Takım
-SCÜ Şarkışla UBYO · Bilişim Sistemleri ve Teknolojileri Bölümü
-Mobil Programlama I · 2. Takım
+<details>
+<summary><strong>📌 Klasörlerin Görevleri</strong></summary>
+
+| Klasör / Dosya | Sorumluluk |
+|---|---|
+| `models/` | Görev, rutin, kategori ve günlük özet veri modelleri |
+| `providers/` | Uygulama durumunun yönetilmesi ve ekranlara aktarılması |
+| `screens/` | Ana sayfalar ve ekran düzeyindeki arayüzler |
+| `services/` | Örnek veriler ve yerel depolama işlemleri |
+| `theme/` | Material 3 aydınlık ve karanlık tema tanımları |
+| `widgets/` | Ekranlar arasında yeniden kullanılan arayüz bileşenleri |
+| `main.dart` | Uygulamanın giriş noktası ve Provider kurulumu |
+| `pubspec.yaml` | Proje bağımlılıkları ve Flutter yapılandırması |
+
+</details>
+
+---
+
+## 👥 Takım
+
+**SCÜ Şarkışla UBYO**  
+Bilişim Sistemleri ve Teknolojileri Bölümü
+
+**Ders:** Mobil Programlama I  
+**Takım:** 2. Takım
+
 - Furkan Yazgülü
 - Görkem Arda Önler
 - Ege Ayçiçek
+
+---
+
 <div align="center">
 
-DayPlanner · Gününü planla, ilerlemeni takip et.
+### 📱 DayPlanner
+
+*Gününü planla, ilerlemeni takip et.*
+
+Flutter &nbsp;·&nbsp; Material 3 &nbsp;·&nbsp; Provider
+
 </div>
