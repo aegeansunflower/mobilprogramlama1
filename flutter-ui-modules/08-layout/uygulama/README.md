@@ -82,7 +82,12 @@ Windows masaüstü
 flutter run -d windows
 Platform komutu çalışmazsa ilgili Flutter platform desteğinin ve gerekli geliştirme araçlarının kurulu olduğunu kontrol et.
 
-🗂️ Proje Yapısı
+## 🗂️ Proje Yapısı
+
+<details>
+<summary>📁 DayPlanner — Klasör ve Dosyalar</summary>
+
+```text
 DayPlanner/
 ├── lib/
 │   ├── main.dart
