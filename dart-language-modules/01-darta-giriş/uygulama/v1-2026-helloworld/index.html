@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>PPL Hacim Hesaplayıcısı - Dart & Spor Bilimi</title>
+  <!-- Google Fonts & Tailwind CDN -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            ppl: {
+              push: '#FF5722',
+              pull: '#0284C7',
+              legs: '#10B981',
+              failure: '#EF4444',
+              success: '#22C55E',
+              warning: '#F59E0B',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.3); border-radius: 4px; }
+
+    * {
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+    }
+
+    /* Device frame styling */
+    #device-container.dark {
+      background-color: #0F172A;
+      border-color: #1E293B;
+      color: #F8FAFC;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.6), 0 0 0 12px #1E293B, 0 0 0 14px #334155;
+    }
+    #device-container.light {
+      background-color: #FFFFFF;
+      border-color: #CBD5E1;
+      color: #0F172A;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.15), 0 0 0 12px #E2E8F0, 0 0 0 14px #CBD5E1;
+    }
+
+    .counter-btn {
+      user-select: none;
+      touch-action: manipulation;
+    }
+    .counter-btn:active {
+      transform: scale(0.92);
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-start p-2 sm:p-6 font-sans">
+
+  <!-- Üst Başlık & Kontroller -->
+  <header class="w-full max-w-4xl flex flex-wrap items-center justify-between gap-4 py-3 px-4 mb-4 bg-slate-900/80 backdrop-blur border border-slate-800 rounded-2xl">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-emerald-400 flex items-center justify-center text-white shadow-lg shadow-sky-500/20 font-bold text-lg">
+        ⚡
+      </div>
+      <div>
+        <h1 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+          PPL Hacim & Performans Hesaplayıcısı
+          <span class="text-xs px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-400 border border-sky-500/30">Dart 3.0</span>
+        </h1>
+        <p class="text-xs text-slate-400">Push-Pull-Legs Tonaj, int/double, const/final ve if/else Tükeniş Analizi</p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <!-- Tema Değiştir -->
+      <button id="toggle-theme-btn" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-300 border border-slate-700 flex items-center gap-1.5">
+        <span id="theme-icon">🌙</span> <span id="theme-text">Koyu Mod</span>
+      </button>
+      <!-- Cihaz Boyutu -->
+      <button id="toggle-size-btn" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-300 border border-slate-700">
+        📱 Cihaz Görünümü
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobil Cihaz Çerçevesi -->
+  <main id="device-container" class="dark relative w-full max-w-[420px] h-[860px] rounded-[48px] overflow-hidden flex flex-col border transition-all duration-300">
+    
+    <!-- Üst Status Bar & Hoparlör Deliği -->
+    <div class="relative w-full h-11 px-8 pt-3 flex items-center justify-between select-none z-30 shrink-0 text-xs font-semibold">
+      <span id="current-clock" class="text-slate-300">21:40</span>
+      <!-- Dinamik Ada / Çentik -->
+      <div class="absolute left-1/2 -translate-x-1/2 top-2.5 w-24 h-5 bg-black rounded-full flex items-center justify-center">
+        <div class="w-2.5 h-2.5 rounded-full bg-slate-900 border border-slate-800"></div>
+      </div>
+      <div class="flex items-center gap-1.5 text-slate-300">
+        <span>5G</span>
+        <svg class="w-4 h-4 inline" fill="currentColor" viewBox="0 0 20 20"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zm6-4a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zm6-3a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/></svg>
+        <span class="text-[11px]">100%</span>
+      </div>
+    </div>
+
+    <!-- Uygulama İçerik Alanı (Kaydırılabilir) -->
+    <div id="screen-viewport" class="flex-1 overflow-y-auto px-4 py-2 pb-24 space-y-4">
+
+      <!-- ================= SEKME 1: HESAPLAYICI ================= -->
+      <section id="tab-calculator" class="space-y-4">
+        
+        <!-- PPL Kategori Seçici Butonları -->
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="setCategory('push')" id="cat-btn-push" class="flex flex-col items-center p-2.5 rounded-2xl border-2 transition-all bg-orange-500/20 border-orange-500 text-orange-400">
+            <span class="text-lg">🔥</span>
+            <span class="font-bold text-xs mt-1">PUSH</span>
+            <span class="text-[10px] opacity-75">İtiş (Göğüs/Omuz)</span>
+          </button>
+          <button onclick="setCategory('pull')" id="cat-btn-pull" class="flex flex-col items-center p-2.5 rounded-2xl border transition-all bg-slate-800/80 border-slate-700 text-slate-400 hover:text-sky-400">
+            <span class="text-lg">🌊</span>
+            <span class="font-bold text-xs mt-1">PULL</span>
+            <span class="text-[10px] opacity-75">Çekiş (Sırt/Biceps)</span>
+          </button>
+          <button onclick="setCategory('legs')" id="cat-btn-legs" class="flex flex-col items-center p-2.5 rounded-2xl border transition-all bg-slate-800/80 border-slate-700 text-slate-400 hover:text-emerald-400">
+            <span class="text-lg">⚡</span>
+            <span class="font-bold text-xs mt-1">LEGS</span>
+            <span class="text-[10px] opacity-75">Bacak (Quad/Ham)</span>
+          </button>
+        </div>
+
+        <!-- Egzersiz Seçici Dropdown -->
+        <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-3">
+          <label class="text-[11px] font-semibold text-slate-400 block mb-1">Egzersiz Seçimi (PPL Split)</label>
+          <select id="exercise-select" onchange="onExerciseChange()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100 font-semibold focus:outline-none focus:border-sky-500">
+            <!-- JavaScript ile doldurulur -->
+          </select>
+          <div id="exercise-badge" class="mt-2 text-[11px] text-slate-400 flex items-center justify-between">
+            <span id="exercise-muscle">Pectoralis Major</span>
+            <span id="exercise-type" class="px-2 py-0.5 rounded bg-slate-700 text-[10px] font-mono text-sky-400">Bileşik Egzersiz</span>
+          </div>
+        </div>
+
+        <!-- Sayısal Veri Girişleri (int ve double) -->
+        <div class="grid grid-cols-2 gap-2.5">
+          <!-- Set Sayısı (int) -->
+          <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-3 flex flex-col justify-between">
+            <div class="text-[11px] text-slate-400 font-medium">Set Sayısı <code class="text-sky-400 font-mono">(int)</code></div>
+            <div class="flex items-center justify-between mt-2">
+              <button onclick="updateValue('sets', -1)" class="counter-btn w-8 h-8 rounded-lg bg-slate-700 hover:bg-slate-600 font-bold text-base flex items-center justify-center">-</button>
+              <span id="val-sets" class="text-xl font-extrabold text-white">3</span>
+              <button onclick="updateValue('sets', 1)" class="counter-btn w-8 h-8 rounded-lg bg-orange-500 hover:bg-orange-600 font-bold text-base text-white flex items-center justify-center">+</button>
+            </div>
+          </div>
+
+          <!-- Tekrar Sayısı (int) -->
+          <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-3 flex flex-col justify-between">
+            <div class="text-[11px] text-slate-400 font-medium">Yapılan Tekrar <code class="text-sky-400 font-mono">(int)</code></div>
+            <div class="flex items-center justify-between mt-2">
+              <button onclick="updateValue('reps', -1)" class="counter-btn w-8 h-8 rounded-lg bg-slate-700 hover:bg-slate-600 font-bold text-base flex items-center justify-center">-</button>
+              <span id="val-reps" class="text-xl font-extrabold text-white">10</span>
+              <button onclick="updateValue('reps', 1)" class="counter-btn w-8 h-8 rounded-lg bg-orange-500 hover:bg-orange-600 font-bold text-base text-white flex items-center justify-center">+</button>
+            </div>
+          </div>
+
+          <!-- Hedef Tekrar (int) -->
+          <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-3 flex flex-col justify-between">
+            <div class="text-[11px] text-slate-400 font-medium">Hedef Tekrar <code class="text-sky-400 font-mono">(int)</code></div>
+            <div class="flex items-center justify-between mt-2">
+              <button onclick="updateValue('targetReps', -1)" class="counter-btn w-8 h-8 rounded-lg bg-slate-700 hover:bg-slate-600 font-bold text-base flex items-center justify-center">-</button>
+              <span id="val-targetReps" class="text-xl font-extrabold text-white">10</span>
+              <button onclick="updateValue('targetReps', 1)" class="counter-btn w-8 h-8 rounded-lg bg-slate-700 hover:bg-slate-600 font-bold text-base flex items-center justify-center">+</button>
+            </div>
+          </div>
+
+          <!-- Ağırlık (double) -->
+          <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-3 flex flex-col justify-between">
+            <div class="text-[11px] text-slate-400 font-medium">Ağırlık kg <code class="text-sky-400 font-mono">(double)</code></div>
+            <div class="flex items-center justify-between mt-2">
+              <button onclick="updateValue('weight', -2.5)" class="counter-btn px-2 h-8 rounded-lg bg-slate-700 hover:bg-slate-600 font-bold text-xs flex items-center justify-center">-2.5</button>
+              <span id="val-weight" class="text-lg font-extrabold text-white">60.0</span>
+              <button onclick="updateValue('weight', 2.5)" class="counter-btn px-2 h-8 rounded-lg bg-orange-500 hover:bg-orange-600 font-bold text-xs text-white flex items-center justify-center">+2.5</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hedef Ağırlık Satırı (double) -->
+        <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-3 flex items-center justify-between">
+          <div class="text-xs text-slate-300">
+            <span class="font-semibold">Hedef Ağırlık:</span> <span id="val-targetWeight" class="font-bold text-sky-400">60.0 kg</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button onclick="updateValue('targetWeight', -2.5)" class="counter-btn px-2.5 py-1 rounded-lg bg-slate-700 hover:bg-slate-600 text-xs font-bold">-2.5</button>
+            <button onclick="updateValue('targetWeight', 2.5)" class="counter-btn px-2.5 py-1 rounded-lg bg-slate-700 hover:bg-slate-600 text-xs font-bold">+2.5</button>
+          </div>
+        </div>
+
+        <!-- Tükeniş (Failure) Toggle Switch -->
+        <div id="failure-container" class="bg-slate-800/80 border border-slate-700 rounded-2xl p-3.5 flex items-center justify-between transition-all">
+          <div class="flex items-center gap-3">
+            <div id="failure-icon" class="w-10 h-10 rounded-xl bg-slate-700 flex items-center justify-center text-xl transition-all">
+              🔥
+            </div>
+            <div>
+              <div class="text-xs font-bold flex items-center gap-2">
+                Tükenişe (Failure / RIR 0) Ulaşıldı mı?
+              </div>
+              <p id="failure-desc" class="text-[11px] text-slate-400">
+                Hayır (Rezervde 1-2 tekrar bırakıldı)
+              </p>
+            </div>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="failure-toggle" onchange="toggleFailure()" class="sr-only peer">
+            <div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-500"></div>
+          </label>
+        </div>
+
+        <!-- CANLI HESAPLANAN TOPLAM HACİM KARTI -->
+        <div class="relative overflow-hidden rounded-3xl p-5 bg-gradient-to-br from-orange-500/20 via-slate-800 to-slate-900 border-2 border-orange-500/40 shadow-xl">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-bold tracking-wider uppercase text-orange-400">HESAPLANAN TOPLAM HACİM</span>
+            <span id="formula-badge" class="px-2.5 py-1 rounded-full bg-orange-500 text-white font-bold text-xs">
+              3 Set × 10 Tekrar
+            </span>
+          </div>
+
+          <div class="flex items-baseline gap-2 mb-3">
+            <span id="total-volume-display" class="text-4xl font-extrabold text-orange-400 tracking-tight">1,800</span>
+            <span class="text-sm font-semibold text-slate-400">kg Toplam Tonaj</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 pt-3 border-t border-slate-700/60">
+            <div>
+              <div class="text-[10px] text-slate-400 font-semibold uppercase">Tahmini 1RM (Epley)</div>
+              <div id="rm-display" class="text-base font-bold text-white mt-0.5">80.0 kg</div>
+            </div>
+            <div>
+              <div class="text-[10px] text-slate-400 font-semibold uppercase">Önerilen Dinlenme</div>
+              <div class="flex items-center gap-1.5 mt-0.5">
+                <span id="rest-time-display" class="text-base font-bold text-white">90 sn</span>
+                <button onclick="openRestTimer()" class="text-xs px-2 py-0.5 rounded bg-orange-500/30 text-orange-300 hover:bg-orange-500/50 flex items-center gap-1 font-semibold">
+                  ⏱️ Başlat
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AKILLI KOÇ VE if/else KARAR DEĞERLENDİRMESİ -->
+        <div class="bg-slate-800/80 border border-slate-700 rounded-2xl p-4 space-y-3">
+          <div class="flex items-center gap-2">
+            <span id="eval-icon" class="text-lg">🎯</span>
+            <h3 id="eval-title" class="text-xs font-bold text-emerald-400 tracking-wide uppercase">
+              HEDEF BAŞARIYLA TAMAMLANDI! 🔥
+            </h3>
+          </div>
+
+          <!-- Hedef Değerlendirme Mesajı -->
+          <p id="eval-goal-msg" class="text-xs text-slate-200 leading-relaxed">
+            Tebrikler! Hem hedef tekrarı (10/10) hem de hedef ağırlığı (60 kg / 60 kg) tamamladınız.
+          </p>
+
+          <!-- Tükeniş Analizi -->
+          <div class="bg-slate-900/60 rounded-xl p-2.5 flex items-start gap-2 text-xs border border-slate-700/60">
+            <span class="text-amber-400">⚡</span>
+            <div id="eval-failure-msg" class="text-slate-300">
+              Tükenişe gidilmedi (Rezervde 1-2 tekrar var). Toparlanma hızı yüksek kalacaktır.
+            </div>
+          </div>
+
+          <!-- Progressive Overload Tavsiyesi -->
+          <div class="bg-sky-500/10 rounded-xl p-2.5 flex items-start gap-2 text-xs border border-sky-500/30">
+            <span class="text-sky-400">📈</span>
+            <div id="eval-overload-msg" class="text-sky-300">
+              Aşırı Yüklenme Kuralı: Gelecek antrenmanda ağırlığı +2.5 kg artırarak 62.5 kg deneyebilirsiniz.
+            </div>
+          </div>
+
+          <!-- Dart Kod Mantığını Aç/Kapat Butonu -->
+          <button onclick="toggleDartSnippet()" class="w-full text-left text-[11px] text-slate-400 hover:text-sky-400 font-mono flex items-center justify-between pt-1">
+            <span>&lt;/&gt; Bu Mantığı Çalıştıran Dart Kodunu Gör</span>
+            <span id="snippet-arrow">▼</span>
+          </button>
+
+          <div id="dart-snippet-box" class="hidden bg-slate-950 rounded-xl p-3 border border-slate-800 text-[11px] font-mono text-sky-400 overflow-x-auto">
+            <pre id="dart-snippet-code">// Dart Mantığı</pre>
+          </div>
+        </div>
+
+        <!-- SETİ GÜNLÜĞE KAYDET BUTONU -->
+        <button onclick="saveCurrentSet()" class="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 font-bold text-sm text-white shadow-lg shadow-orange-500/25 flex items-center justify-center gap-2">
+          <span>💾</span> Bu Seti Günlüğe Kaydet
+        </button>
+
+      </section>
+
+      <!-- ================= SEKME 2: GÜNLÜK ================= -->
+      <section id="tab-history" class="hidden space-y-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-base font-bold text-white flex items-center gap-2">
+            📋 Antrenman Günlüğü
+          </h2>
+          <button onclick="clearAllSets()" class="text-xs text-red-400 hover:text-red-300 font-medium">
+            Tümünü Temizle
+          </button>
+        </div>
+
+        <!-- Günlük Hacim Özeti Kartı -->
+        <div class="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 rounded-3xl p-5 shadow-xl">
+          <div class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Bugünün Toplam Hacmi</div>
+          <div class="flex items-baseline gap-2 my-2">
+            <span id="history-total-vol" class="text-4xl font-black text-sky-400">0</span>
+            <span class="text-sm font-semibold text-slate-400">kg Tonaj</span>
+          </div>
+
+          <!-- Kategori Hacim Dağılım Barları -->
+          <div class="space-y-2 mt-4 pt-3 border-t border-slate-700/60">
+            <div>
+              <div class="flex justify-between text-xs text-slate-300 mb-1">
+                <span>Push (İtiş)</span>
+                <span id="vol-push-text" class="font-bold text-orange-400">0 kg</span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-slate-700 overflow-hidden">
+                <div id="bar-push" class="h-full bg-orange-500 rounded-full transition-all duration-300" style="width: 0%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-xs text-slate-300 mb-1">
+                <span>Pull (Çekiş)</span>
+                <span id="vol-pull-text" class="font-bold text-sky-400">0 kg</span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-slate-700 overflow-hidden">
+                <div id="bar-pull" class="h-full bg-sky-500 rounded-full transition-all duration-300" style="width: 0%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-xs text-slate-300 mb-1">
+                <span>Legs (Bacak)</span>
+                <span id="vol-legs-text" class="font-bold text-emerald-400">0 kg</span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-slate-700 overflow-hidden">
+                <div id="bar-legs" class="h-full bg-emerald-500 rounded-full transition-all duration-300" style="width: 0%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kaydedilen Setler Listesi -->
+        <div id="history-sets-container" class="space-y-2.5">
+          <!-- Dinamik olarak eklenir -->
+          <div id="history-empty" class="text-center py-12 text-slate-500 text-xs">
+            Henüz kaydedilmiş set yok.<br>Hesaplayıcı ekranından set ekleyebilirsiniz.
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SEKME 3: DART MANTIĞI ================= -->
+      <section id="tab-dart" class="hidden space-y-4">
+        <div class="bg-sky-500/10 border border-sky-500/30 rounded-2xl p-4">
+          <div class="flex items-center gap-2 text-sky-400 font-bold text-sm">
+            <span>🎯</span> Dart Programlama Mimarisi
+          </div>
+          <p class="text-xs text-slate-300 mt-1 leading-relaxed">
+            Bu proje, spor bilimi prensiplerini Dart dilinin temel taşları olan <code class="text-sky-300 font-mono">int</code>, <code class="text-sky-300 font-mono">double</code>, <code class="text-amber-300 font-mono">const</code>, <code class="text-amber-300 font-mono">final</code> ve <code class="text-emerald-300 font-mono">if/else</code> yapılarıyla modellemiştir.
+          </p>
+        </div>
+
+        <!-- 1. int ve double -->
+        <div class="bg-slate-800/80 border border-slate-700 rounded-2xl overflow-hidden">
+          <div class="p-3.5 border-b border-slate-700 flex items-center justify-between">
+            <span class="text-xs font-bold text-white flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-sky-400"></span> 1. int ve double Türleri
+            </span>
+            <span class="text-[10px] text-slate-400 font-mono">Değişkenler</span>
+          </div>
+          <p class="text-xs text-slate-300 p-3.5 pb-2">
+            Tam sayı sayımları (set, tekrar, dinlenme süresi) için <strong class="text-sky-400">int</strong>; ağırlık ve tonaj gibi hassas ondalık değerler için <strong class="text-sky-400">double</strong> kullanılır.
+          </p>
+          <div class="bg-slate-950 p-3 text-[11px] font-mono text-sky-300 border-t border-slate-800">
+<pre>// Sayısal Veri Türleri:
+int sets = 3;             // Tam sayı
+int reps = 10;            // Tam sayı
+double weight = 72.5;     // Ondalıklı sayı (kg)
+
+// Otomatik double dönüşümü:
+double volume = sets * reps * weight; // 2175.0 kg</pre>
+          </div>
+        </div>
+
+        <!-- 2. const ve final -->
+        <div class="bg-slate-800/80 border border-slate-700 rounded-2xl overflow-hidden">
+          <div class="p-3.5 border-b border-slate-700 flex items-center justify-between">
+            <span class="text-xs font-bold text-white flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-amber-400"></span> 2. const ve final Sabitleri
+            </span>
+            <span class="text-[10px] text-slate-400 font-mono">Sabit Prensipler</span>
+          </div>
+          <p class="text-xs text-slate-300 p-3.5 pb-2">
+            <strong class="text-amber-400">const</strong>: Değiştirilemez spor prensipleri (derleme zamanı sabitleri).<br>
+            <strong class="text-amber-400">final</strong>: Çalışma zamanında hesaplanan ve sonradan değiştirilemeyen antrenman hacmi.
+          </p>
+          <div class="bg-slate-950 p-3 text-[11px] font-mono text-amber-300 border-t border-slate-800">
+<pre>// const: Evrensel değişmez kurallar
+class TrainingPrinciples {
+  static const int defaultRestPPL = 90;
+  static const int defaultRestLegs = 120;
+  static const int failureBonus = 30; // +30 sn
+  static const double overloadStep = 2.5; // +2.5 kg
+}
+
+// final: Çalışma anında hesaplanan tek seferlik değer
+final double calculatedVolume = sets * reps * weight;
+final DateTime workoutDate = DateTime.now();</pre>
+          </div>
+        </div>
+
+        <!-- 3. if / else Mantığı -->
+        <div class="bg-slate-800/80 border border-slate-700 rounded-2xl overflow-hidden">
+          <div class="p-3.5 border-b border-slate-700 flex items-center justify-between">
+            <span class="text-xs font-bold text-white flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span> 3. if / else Karar Blokları
+            </span>
+            <span class="text-[10px] text-slate-400 font-mono">Tükeniş & Hedef</span>
+          </div>
+          <p class="text-xs text-slate-300 p-3.5 pb-2">
+            Tükeniş (failure) ve hedef kontrolü ile sporcuya anlık toparlanma ve aşırı yüklenme (progressive overload) geri bildirimi verilir.
+          </p>
+          <div class="bg-slate-950 p-3 text-[11px] font-mono text-emerald-300 border-t border-slate-800">
+<pre>// Tükenişe ulaşıldı mı kontrolü:
+if (reachedFailure == true) {
+  // Merkezi sinir sistemi toparlanması için +30 sn
+  restSeconds += TrainingPrinciples.failureBonus;
+}
+
+// Hedef tutturuldu mu kontrolü:
+if (reps >= targetReps && weight >= targetWeight) {
+  status = "Hedef Tamamlandı! Gelecek seans ağırlığı artır.";
+} else {
+  status = "Hedef tutmadı. Aynı ağırlıkta kalın.";
+}</pre>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Dinlenme Sayacı Modalı (Popup) -->
+    <div id="rest-timer-modal" class="hidden absolute inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-6">
+      <div class="w-full bg-slate-900 border border-slate-800 rounded-3xl p-6 text-center space-y-4 shadow-2xl">
+        <div class="flex justify-between items-center">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Dinlenme Sayacı</span>
+          <button onclick="closeRestTimer()" class="text-slate-400 hover:text-white text-lg">✕</button>
+        </div>
+
+        <div class="relative w-40 h-40 mx-auto flex items-center justify-center">
+          <svg class="w-full h-full transform -rotate-90">
+            <circle cx="80" cy="80" r="70" stroke="currentColor" stroke-width="8" class="text-slate-800" fill="transparent"/>
+            <circle id="timer-progress-circle" cx="80" cy="80" r="70" stroke="currentColor" stroke-width="8" class="text-orange-500" stroke-linecap="round" fill="transparent" stroke-dasharray="440" stroke-dashoffset="0"/>
+          </svg>
+          <div class="absolute inset-0 flex flex-col items-center justify-center">
+            <span id="timer-countdown-text" class="text-3xl font-black text-white">01:30</span>
+            <span id="timer-status-text" class="text-[11px] text-slate-400 mt-1">Nefes Al & Toparlan</span>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-center gap-2 pt-2">
+          <button onclick="addTimerSeconds(30)" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200">+30 sn</button>
+          <button id="timer-toggle-btn" onclick="toggleRestTimer()" class="px-5 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-xs font-bold text-white">Duraklat</button>
+          <button onclick="resetRestTimer()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200">Sıfırla</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alt Navigasyon Çubuğu (Bottom Navigation Bar) -->
+    <nav class="absolute bottom-0 inset-x-0 h-16 bg-slate-900/95 backdrop-blur border-t border-slate-800 px-6 flex items-center justify-around z-40 select-none">
+      <button onclick="switchTab('calculator')" id="nav-btn-calculator" class="flex flex-col items-center gap-1 text-orange-400 font-bold transition-all">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+        <span class="text-[10px]">Hesaplayıcı</span>
+      </button>
+
+      <button onclick="switchTab('history')" id="nav-btn-history" class="flex flex-col items-center gap-1 text-slate-400 hover:text-white transition-all">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <span class="text-[10px]">Günlük</span>
+      </button>
+
+      <button onclick="switchTab('dart')" id="nav-btn-dart" class="flex flex-col items-center gap-1 text-slate-400 hover:text-white transition-all">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+        <span class="text-[10px]">Dart Mantığı</span>
+      </button>
+    </nav>
+
+    <!-- Home Bar Çizgisi -->
+    <div class="absolute bottom-1.5 left-1/2 -translate-x-1/2 w-32 h-1 bg-slate-600 rounded-full z-50 pointer-events-none"></div>
+  </main>
+
+  <!-- JAVASCRIPT MOTORU: Dart Mantığının Birebir Karşılığı -->
+  <script>
+    // 1. DEĞİŞMEZ ANTREMAN PRENSİPLERİ (const karşılığı)
+    const TRAINING_PRINCIPLES = {
+      defaultRestPPL: 90, // saniye (int)
+      defaultRestLegs: 120, // saniye (int)
+      failureBonusRestSeconds: 30, // saniye (int)
+      progressiveOverloadStepKg: 2.5, // kg (double)
+      minHypertrophyReps: 6,
+      maxHypertrophyReps: 12,
+    };
+
+    // 2. EGZERSİZ VERİTABANI
+    const EXERCISES = {
+      push: [
+        { id: 'bench_press', name: 'Barbell Bench Press', muscle: 'Göğüs (Pectoralis)', compound: true },
+        { id: 'ohp', name: 'Overhead Press (OHP)', muscle: 'Omuz (Deltoid)', compound: true },
+        { id: 'incline_db', name: 'Incline Dumbbell Press', muscle: 'Üst Göğüs', compound: true },
+        { id: 'dips', name: 'Chest / Triceps Dips', muscle: 'Göğüs & Triceps', compound: true },
+        { id: 'lat_raise', name: 'Dumbbell Lateral Raise', muscle: 'Yan Omuz', compound: false },
+        { id: 'triceps_pushdown', name: 'Triceps Rope Pushdown', muscle: 'Arka Kol', compound: false },
+      ],
+      pull: [
+        { id: 'deadlift', name: 'Conventional Deadlift', muscle: 'Tüm Sırt & Arka Zincir', compound: true },
+        { id: 'barbell_row', name: 'Barbell Bent-Over Row', muscle: 'Kanat & Orta Sırt', compound: true },
+        { id: 'pull_up', name: 'Pull-Up (Barfiks)', muscle: 'Kanat & Biceps', compound: true },
+        { id: 'lat_pulldown', name: 'Lat Pulldown', muscle: 'Kanat', compound: false },
+        { id: 'face_pull', name: 'Rope Face Pull', muscle: 'Arka Omuz & Trapez', compound: false },
+        { id: 'biceps_curl', name: 'Barbell Biceps Curl', muscle: 'Ön Kol (Biceps)', compound: false },
+      ],
+      legs: [
+        { id: 'squat', name: 'Barbell Back Squat', muscle: 'Ön Bacak & Kalça (Quad/Glute)', compound: true },
+        { id: 'rdl', name: 'Romanian Deadlift (RDL)', muscle: 'Arka Bacak & Kalça (Hamstrings)', compound: true },
+        { id: 'leg_press', name: 'Leg Press', muscle: 'Ön Bacak (Quadriceps)', compound: true },
+        { id: 'leg_ext', name: 'Leg Extension', muscle: 'Ön Bacak İzolasyon', compound: false },
+        { id: 'leg_curl', name: 'Lying Leg Curl', muscle: 'Arka Bacak', compound: false },
+        { id: 'calf_raise', name: 'Standing Calf Raise', muscle: 'Baldır (Calf)', compound: false },
+      ]
+    };
+
+    // 3. ANLIK DURUM DEĞİŞKENLERİ (int, double, bool)
+    let currentCategory = 'push';
+    let sets = 3;           // int
+    let reps = 10;          // int
+    let targetReps = 10;    // int
+    let weight = 60.0;      // double
+    let targetWeight = 60.0;// double
+    let reachedFailure = false; // bool
+
+    // Kaydedilen Setler Listesi
+    let savedSets = JSON.parse(localStorage.getItem('ppl_saved_sets_v1') || '[]');
+
+    // Dinlenme Zamanlayıcısı Değişkenleri
+    let timerInterval = null;
+    let timerTotalSeconds = 90;
+    let timerRemainingSeconds = 90;
+    let isTimerRunning = false;
+
+    // Sayfa Yüklendiğinde
+    window.addEventListener('DOMContentLoaded', () => {
+      populateExercises();
+      updateClock();
+      setInterval(updateClock, 1000);
+      recalculate();
+      renderHistory();
+    });
+
+    function updateClock() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('current-clock').innerText = `${h}:${m}`;
+    }
+
+    // PPL Kategori Değiştir
+    function setCategory(cat) {
+      currentCategory = cat;
+      ['push', 'pull', 'legs'].forEach(c => {
+        const btn = document.getElementById(`cat-btn-${c}`);
+        if (c === cat) {
+          btn.className = `flex flex-col items-center p-2.5 rounded-2xl border-2 transition-all ${
+            cat === 'push' ? 'bg-orange-500/20 border-orange-500 text-orange-400' :
+            cat === 'pull' ? 'bg-sky-500/20 border-sky-500 text-sky-400' :
+            'bg-emerald-500/20 border-emerald-500 text-emerald-400'
+          }`;
+        } else {
+          btn.className = 'flex flex-col items-center p-2.5 rounded-2xl border transition-all bg-slate-800/80 border-slate-700 text-slate-400 hover:text-white';
+        }
+      });
+      populateExercises();
+      recalculate();
+    }
+
+    function populateExercises() {
+      const select = document.getElementById('exercise-select');
+      select.innerHTML = '';
+      const list = EXERCISES[currentCategory];
+      list.forEach(ex => {
+        const opt = document.createElement('option');
+        opt.value = ex.id;
+        opt.innerText = ex.name;
+        select.appendChild(opt);
+      });
+      onExerciseChange();
+    }
+
+    function onExerciseChange() {
+      const select = document.getElementById('exercise-select');
+      const ex = EXERCISES[currentCategory].find(e => e.id === select.value) || EXERCISES[currentCategory][0];
+      document.getElementById('exercise-muscle').innerText = ex.muscle;
+      document.getElementById('exercise-type').innerText = ex.compound ? 'Bileşik Egzersiz' : 'İzolasyon';
+      recalculate();
+    }
+
+    // Sayısal Değer Güncelleme (int ve double)
+    function updateValue(field, delta) {
+      if (field === 'sets') {
+        sets = Math.max(1, sets + delta);
+        document.getElementById('val-sets').innerText = sets;
+      } else if (field === 'reps') {
+        reps = Math.max(1, reps + delta);
+        document.getElementById('val-reps').innerText = reps;
+      } else if (field === 'targetReps') {
+        targetReps = Math.max(1, targetReps + delta);
+        document.getElementById('val-targetReps').innerText = targetReps;
+      } else if (field === 'weight') {
+        weight = Math.max(0, parseFloat((weight + delta).toFixed(1)));
+        document.getElementById('val-weight').innerText = weight.toFixed(1);
+      } else if (field === 'targetWeight') {
+        targetWeight = Math.max(0, parseFloat((targetWeight + delta).toFixed(1)));
+        document.getElementById('val-targetWeight').innerText = targetWeight.toFixed(1) + ' kg';
+      }
+      recalculate();
+    }
+
+    // Tükeniş Toggle
+    function toggleFailure() {
+      reachedFailure = document.getElementById('failure-toggle').checked;
+      const desc = document.getElementById('failure-desc');
+      const box = document.getElementById('failure-container');
+      const icon = document.getElementById('failure-icon');
+
+      if (reachedFailure) {
+        desc.innerText = 'Evet (Son tekrarda pozitif tükeniş gerçekleşti)';
+        box.className = 'bg-red-500/15 border border-red-500 rounded-2xl p-3.5 flex items-center justify-between transition-all';
+        icon.className = 'w-10 h-10 rounded-xl bg-red-500 text-white flex items-center justify-center text-xl shadow-lg shadow-red-500/30';
+      } else {
+        desc.innerText = 'Hayır (Rezervde 1-2 tekrar bırakıldı)';
+        box.className = 'bg-slate-800/80 border border-slate-700 rounded-2xl p-3.5 flex items-center justify-between transition-all';
+        icon.className = 'w-10 h-10 rounded-xl bg-slate-700 text-slate-300 flex items-center justify-center text-xl';
+      }
+      recalculate();
+    }
+
+    // 4. MANTIK MOTORU: Dart Kodunun Aynısı
+    function recalculate() {
+      // 1. Toplam Hacim Hesabı (double)
+      const totalVolume = sets * reps * weight;
+      document.getElementById('total-volume-display').innerText = totalVolume.toLocaleString('tr-TR', { maximumFractionDigits: 1 });
+      document.getElementById('formula-badge').innerText = `${sets} Set × ${reps} Tekrar`;
+
+      // 2. Tahmini 1RM (double)
+      let oneRm = reps === 1 ? weight : weight * (1.0 + (reps / 30.0));
+      document.getElementById('rm-display').innerText = `${oneRm.toFixed(1)} kg`;
+
+      // 3. Dinlenme Süresi (int & const)
+      let baseRest = currentCategory === 'legs' ? TRAINING_PRINCIPLES.defaultRestLegs : TRAINING_PRINCIPLES.defaultRestPPL;
+      let calculatedRest = baseRest;
+
+      // 4. if/else Tükeniş Kontrolü
+      let failureFeedback = '';
+      if (reachedFailure) {
+        calculatedRest += TRAINING_PRINCIPLES.failureBonusRestSeconds;
+        failureFeedback = `Tükenişe (RIR 0) ulaşıldı! Sinir sistemi toparlanması için dinlenme +${TRAINING_PRINCIPLES.failureBonusRestSeconds} sn artırıldı (${calculatedRest} sn).`;
+      } else {
+        failureFeedback = `Tükenişe gidilmedi (Rezervde 1-2 tekrar var). Toparlanma hızı korunacak. Standart dinlenme (${calculatedRest} sn) yeterlidir.`;
+      }
+      document.getElementById('rest-time-display').innerText = `${calculatedRest} sn`;
+      document.getElementById('eval-failure-msg').innerText = failureFeedback;
+      timerTotalSeconds = calculatedRest;
+
+      // 5. if/else Hedef Kontrolü
+      let isGoalMet = false;
+      let statusTitle = '';
+      let goalMsg = '';
+      let overloadMsg = '';
+
+      if (reps >= targetReps && weight >= targetWeight) {
+        isGoalMet = true;
+        statusTitle = 'HEDEF BAŞARIYLA TAMAMLANDI! 🔥';
+        goalMsg = `Tebrikler! Hem hedef tekrarı (${reps}/${targetReps}) hem de hedef ağırlığı (${weight} kg / ${targetWeight} kg) eksiksiz tamamladınız.`;
+        const nextW = (weight + TRAINING_PRINCIPLES.progressiveOverloadStepKg).toFixed(1);
+        overloadMsg = `Aşırı Yüklenme (Progressive Overload): Bir sonraki seansta ağırlığı ${nextW} kg (+${TRAINING_PRINCIPLES.progressiveOverloadStepKg} kg) yapmayı deneyin.`;
+      } else if (reps >= targetReps && weight < targetWeight) {
+        isGoalMet = false;
+        statusTitle = 'TEKRAR TAMAM, AĞIRLIK ARTIRILABİLİR ⚡';
+        goalMsg = `Hedef tekrara ulaştınız (${reps}/${targetReps}), ancak ağırlık hedefin (${targetWeight} kg) gerisinde kaldı.`;
+        overloadMsg = `Bir sonraki sette tekrarı koruyarak ağırlığı ${targetWeight} kg seviyesine çıkarın.`;
+      } else if (reps < targetReps && weight >= targetWeight) {
+        isGoalMet = false;
+        const missing = targetReps - reps;
+        statusTitle = `HEDEFİN ${missing} TEKRAR GERİSİNDE KALINDI ⚠️`;
+        goalMsg = `Ağırlık sağlandı ancak hedef tekrara (${reps}/${targetReps}) ulaşılamadı.`;
+        overloadMsg = `Ağırlığı artırmayın! Bu ağırlıkta (${weight} kg) kalarak önce ${targetReps} tekrarı tutturmaya odaklanın.`;
+      } else {
+        isGoalMet = false;
+        statusTitle = 'HEDEF TUTTURULAMADI 📉';
+        goalMsg = `Hem tekrar (${reps}/${targetReps}) hem ağırlık (${weight}/${targetWeight} kg) hedefin altında kaldı.`;
+        overloadMsg = `Dinlenme ve toparlanmanızı artırın. Formu bozmadan kontrollü tekrarlarla devam edin.`;
+      }
+
+      // UI Güncelle
+      const titleElem = document.getElementById('eval-title');
+      const iconElem = document.getElementById('eval-icon');
+      titleElem.innerText = statusTitle;
+      titleElem.className = isGoalMet ? 'text-xs font-bold text-emerald-400 tracking-wide uppercase' : 'text-xs font-bold text-amber-400 tracking-wide uppercase';
+      iconElem.innerText = isGoalMet ? '🔥' : '⚠️';
+
+      document.getElementById('eval-goal-msg').innerText = goalMsg;
+      document.getElementById('eval-overload-msg').innerText = overloadMsg;
+
+      // Dart Kod Önizlemesi
+      document.getElementById('dart-snippet-code').innerText = `// Dart Mantığı:
+int sets = ${sets};
+int reps = ${reps};
+double weight = ${weight.toFixed(1)};
+final double volume = sets * reps * weight; // ${totalVolume.toFixed(1)} kg
+
+const int baseRest = ${currentCategory === 'legs' ? 120 : 90};
+int rest = baseRest;
+
+if (reachedFailure == true) {
+  rest += TrainingPrinciples.failureBonus; // ${calculatedRest} sn
+}
+
+if (reps >= ${targetReps} && weight >= ${targetWeight.toFixed(1)}) {
+  // Progressive overload sağlandı
+  double nextWeight = weight + 2.5; // ${(weight + 2.5).toFixed(1)} kg
+}`;
+    }
+
+    function toggleDartSnippet() {
+      const box = document.getElementById('dart-snippet-box');
+      const arrow = document.getElementById('snippet-arrow');
+      if (box.classList.contains('hidden')) {
+        box.classList.remove('hidden');
+        arrow.innerText = '▲';
+      } else {
+        box.classList.add('hidden');
+        arrow.innerText = '▼';
+      }
+    }
+
+    // Seti Günlüğe Kaydet
+    function saveCurrentSet() {
+      const select = document.getElementById('exercise-select');
+      const ex = EXERCISES[currentCategory].find(e => e.id === select.value) || EXERCISES[currentCategory][0];
+      const volume = sets * reps * weight;
+      const now = new Date();
+      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+      const newSet = {
+        id: Date.now().toString(),
+        category: currentCategory,
+        exerciseName: ex.name,
+        sets,
+        reps,
+        weight,
+        volume,
+        reachedFailure,
+        time: timeStr
+      };
+
+      savedSets.unshift(newSet);
+      localStorage.setItem('ppl_saved_sets_v1', JSON.stringify(savedSets));
+      renderHistory();
+
+      // Bildirim
+      const btn = event.currentTarget;
+      const origText = btn.innerHTML;
+      btn.innerHTML = '✅ Set Başarıyla Kaydedildi!';
+      btn.classList.add('bg-emerald-600');
+      setTimeout(() => {
+        btn.innerHTML = origText;
+        btn.classList.remove('bg-emerald-600');
+      }, 1500);
+    }
+
+    // Günlük Sekmesini Render Et
+    function renderHistory() {
+      const container = document.getElementById('history-sets-container');
+      const emptyMsg = document.getElementById('history-empty');
+
+      let totalVol = 0;
+      let pushVol = 0;
+      let pullVol = 0;
+      let legsVol = 0;
+
+      savedSets.forEach(s => {
+        totalVol += s.volume;
+        if (s.category === 'push') pushVol += s.volume;
+        if (s.category === 'pull') pullVol += s.volume;
+        if (s.category === 'legs') legsVol += s.volume;
+      });
+
+      document.getElementById('history-total-vol').innerText = totalVol.toLocaleString('tr-TR', { maximumFractionDigits: 0 });
+      document.getElementById('vol-push-text').innerText = `${pushVol.toFixed(0)} kg`;
+      document.getElementById('vol-pull-text').innerText = `${pullVol.toFixed(0)} kg`;
+      document.getElementById('vol-legs-text').innerText = `${legsVol.toFixed(0)} kg`;
+
+      document.getElementById('bar-push').style.width = totalVol > 0 ? `${(pushVol / totalVol) * 100}%` : '0%';
+      document.getElementById('bar-pull').style.width = totalVol > 0 ? `${(pullVol / totalVol) * 100}%` : '0%';
+      document.getElementById('bar-legs').style.width = totalVol > 0 ? `${(legsVol / totalVol) * 100}%` : '0%';
+
+      if (savedSets.length === 0) {
+        container.innerHTML = '';
+        container.appendChild(emptyMsg);
+        emptyMsg.classList.remove('hidden');
+        return;
+      }
+
+      emptyMsg.classList.add('hidden');
+      container.innerHTML = '';
+
+      savedSets.forEach(s => {
+        const catColor = s.category === 'push' ? 'orange' : s.category === 'pull' ? 'sky' : 'emerald';
+        const card = document.createElement('div');
+        card.className = 'bg-slate-800/80 border border-slate-700 rounded-2xl p-3 flex flex-col gap-1.5';
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-${catColor}-500/20 text-${catColor}-400 uppercase">${s.category}</span>
+              <span class="text-xs font-bold text-white">${s.exerciseName}</span>
+            </div>
+            <button onclick="deleteSet('${s.id}')" class="text-slate-500 hover:text-red-400 text-xs p-1">✕</button>
+          </div>
+          <div class="flex items-center justify-between text-xs text-slate-300">
+            <span>${s.sets} set × ${s.reps} tekrar × ${s.weight} kg</span>
+            <span class="font-extrabold text-${catColor}-400">${s.volume.toFixed(0)} kg</span>
+          </div>
+          <div class="flex items-center justify-between text-[10px] text-slate-400 pt-1 border-t border-slate-700/60">
+            <span>${s.reachedFailure ? '<span class="text-red-400 font-bold">🔥 Tükeniş (RIR 0)</span>' : 'Rezervde Tekrar'}</span>
+            <span>${s.time}</span>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function deleteSet(id) {
+      savedSets = savedSets.filter(s => s.id !== id);
+      localStorage.setItem('ppl_saved_sets_v1', JSON.stringify(savedSets));
+      renderHistory();
+    }
+
+    function clearAllSets() {
+      if (confirm('Tüm kayıtları silmek istediğinizden emin misiniz?')) {
+        savedSets = [];
+        localStorage.removeItem('ppl_saved_sets_v1');
+        renderHistory();
+      }
+    }
+
+    // Dinlenme Zamanlayıcısı
+    function openRestTimer() {
+      timerRemainingSeconds = timerTotalSeconds;
+      document.getElementById('rest-timer-modal').classList.remove('hidden');
+      updateTimerUI();
+      startTimer();
+    }
+
+    function closeRestTimer() {
+      clearInterval(timerInterval);
+      isTimerRunning = false;
+      document.getElementById('rest-timer-modal').classList.add('hidden');
+    }
+
+    function startTimer() {
+      clearInterval(timerInterval);
+      isTimerRunning = true;
+      document.getElementById('timer-toggle-btn').innerText = 'Duraklat';
+      timerInterval = setInterval(() => {
+        if (timerRemainingSeconds > 0) {
+          timerRemainingSeconds--;
+          updateTimerUI();
+        } else {
+          clearInterval(timerInterval);
+          isTimerRunning = false;
+          document.getElementById('timer-status-text').innerText = 'Süre Doldu! Sıradaki Sete Geç 🔥';
+          document.getElementById('timer-toggle-btn').innerText = 'Bitti';
+        }
+      }, 1000);
+    }
+
+    function toggleRestTimer() {
+      if (isTimerRunning) {
+        clearInterval(timerInterval);
+        isTimerRunning = false;
+        document.getElementById('timer-toggle-btn').innerText = 'Devam Et';
+      } else {
+        if (timerRemainingSeconds <= 0) timerRemainingSeconds = timerTotalSeconds;
+        startTimer();
+      }
+    }
+
+    function resetRestTimer() {
+      clearInterval(timerInterval);
+      isTimerRunning = false;
+      timerRemainingSeconds = timerTotalSeconds;
+      document.getElementById('timer-toggle-btn').innerText = 'Başlat';
+      updateTimerUI();
+    }
+
+    function addTimerSeconds(sec) {
+      timerRemainingSeconds += sec;
+      timerTotalSeconds += sec;
+      updateTimerUI();
+    }
+
+    function updateTimerUI() {
+      const m = Math.floor(timerRemainingSeconds / 60);
+      const s = timerRemainingSeconds % 60;
+      document.getElementById('timer-countdown-text').innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+      const ratio = timerTotalSeconds > 0 ? timerRemainingSeconds / timerTotalSeconds : 0;
+      const offset = 440 - (440 * ratio);
+      document.getElementById('timer-progress-circle').style.strokeDashoffset = offset;
+    }
+
+    // Sekme Değiştirici
+    function switchTab(tab) {
+      ['calculator', 'history', 'dart'].forEach(t => {
+        const sec = document.getElementById(`tab-${t}`);
+        const btn = document.getElementById(`nav-btn-${t}`);
+        if (t === tab) {
+          sec.classList.remove('hidden');
+          btn.className = 'flex flex-col items-center gap-1 text-orange-400 font-bold transition-all';
+        } else {
+          sec.classList.add('hidden');
+          btn.className = 'flex flex-col items-center gap-1 text-slate-400 hover:text-white transition-all';
+        }
+      });
+      if (tab === 'history') renderHistory();
+    }
+
+    // Tema Değiştirici
+    const themeBtn = document.getElementById('toggle-theme-btn');
+    themeBtn.addEventListener('click', () => {
+      const device = document.getElementById('device-container');
+      const isDark = device.classList.contains('dark');
+      if (isDark) {
+        device.classList.remove('dark');
+        device.classList.add('light');
+        document.getElementById('theme-icon').innerText = '☀️';
+        document.getElementById('theme-text').innerText = 'Açık Mod';
+      } else {
+        device.classList.remove('light');
+        device.classList.add('dark');
+        document.getElementById('theme-icon').innerText = '🌙';
+        document.getElementById('theme-text').innerText = 'Koyu Mod';
+      }
+    });
+
+    // Cihaz Boyutu Değiştirici
+    const sizeBtn = document.getElementById('toggle-size-btn');
+    let isFullWidth = false;
+    sizeBtn.addEventListener('click', () => {
+      const device = document.getElementById('device-container');
+      isFullWidth = !isFullWidth;
+      if (isFullWidth) {
+        device.className = device.className.replace('max-w-[420px]', 'max-w-2xl');
+        sizeBtn.innerText = '📱 Telefon Boyutu';
+      } else {
+        device.className = device.className.replace('max-w-2xl', 'max-w-[420px]');
+        sizeBtn.innerText = '💻 Geniş Görünüm';
+      }
+    });
+  </script>
+</body>
+</html>
